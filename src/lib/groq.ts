@@ -1,7 +1,19 @@
 import Groq from "groq-sdk";
 
-export const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
+// Lazy initialization — avoids build-time crash when GROQ_API_KEY is absent
+let _groq: Groq | null = null;
+export function getGroq(): Groq {
+  if (!_groq) {
+    _groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+  }
+  return _groq;
+}
+
+/** @deprecated use getGroq() instead */
+export const groq = new Proxy({} as Groq, {
+  get(_target, prop) {
+    return (getGroq() as unknown as Record<string | symbol, unknown>)[prop];
+  },
 });
 
 export const GROQ_MODEL = "llama-3.3-70b-versatile";

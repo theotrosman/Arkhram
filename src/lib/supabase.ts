@@ -1,9 +1,19 @@
 import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+// Lazy singleton — avoids build-time crash when env vars are absent
+let _supabase: ReturnType<typeof createClient> | null = null;
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = new Proxy({} as ReturnType<typeof createClient>, {
+  get(_target, prop) {
+    if (!_supabase) {
+      _supabase = createClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
+      );
+    }
+    return (_supabase as unknown as Record<string | symbol, unknown>)[prop];
+  },
+});
 
 export function getUserId(): string {
   if (typeof window === "undefined") return "";
