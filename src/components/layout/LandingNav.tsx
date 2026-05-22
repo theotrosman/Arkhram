@@ -1,43 +1,49 @@
 "use client";
 
 import Link from "next/link";
-import { useScramble } from "@/hooks/useScramble";
 import { useState, useEffect } from "react";
 
 export function LandingNav() {
-  const [mounted, setMounted] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const [time, setTime] = useState("--:--:--");
+  const [flows, setFlows] = useState(27);
+
   useEffect(() => {
-    setMounted(true);
-    const onScroll = () => setScrolled(window.scrollY > 20);
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
+    const tick = () => {
+      const d = new Date();
+      setTime([d.getHours(), d.getMinutes(), d.getSeconds()].map((n) => String(n).padStart(2, "0")).join(":"));
+    };
+    tick();
+    const id = setInterval(() => {
+      tick();
+      if (Math.random() > 0.85) setFlows((f) => Math.max(20, f + (Math.random() > 0.5 ? 1 : -1)));
+    }, 1000);
+    return () => clearInterval(id);
   }, []);
-  const name = useScramble("Arkhram", { delay: 0, speed: 60, trigger: mounted });
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 transition-all duration-300 ${
-      scrolled ? "border-b border-zinc-900/80 bg-[#050505]/90 backdrop-blur-md" : "bg-transparent"
-    }`}>
-      <Link href="/" className="text-sm font-bold text-white tracking-tight font-mono">
-        {mounted ? name : "Arkhram"}
+    <nav className="fixed top-0 left-0 right-0 z-50 h-11 border-b border-zinc-800 bg-[#080808] flex items-center justify-between px-5">
+      <Link href="/" className="font-mono text-sm font-black text-white tracking-[0.18em]">
+        ARKHRAM
       </Link>
-
-      <div className="flex items-center gap-4">
-        <Link href="#como-funciona" className="text-xs text-zinc-500 hover:text-zinc-300 transition-colors hidden sm:block">
-          Cómo funciona
+      <div className="hidden md:flex items-center gap-4 font-mono text-[10px] text-zinc-600">
+        <span>SYS/2.1</span>
+        <span className="text-zinc-800">|</span>
+        <span className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+          <span className="text-green-600">{flows} flows active</span>
+        </span>
+        <span className="text-zinc-800">|</span>
+        <span>{time} UTC-3</span>
+      </div>
+      <div className="flex items-center gap-3">
+        <Link href="/login" className="font-mono text-[11px] text-zinc-600 hover:text-zinc-300 transition-colors">
+          /login
         </Link>
         <Link
           href="/login"
-          className="px-4 py-2 rounded-full border border-zinc-800 hover:border-violet-500/50 hover:bg-violet-500/10 text-zinc-400 hover:text-white text-xs font-medium transition-all duration-200"
+          className="font-mono text-[11px] border border-zinc-700 hover:border-violet-500/60 text-zinc-300 hover:text-white px-3 py-1.5 transition-all duration-150"
         >
-          Entrar
-        </Link>
-        <Link
-          href="/login"
-          className="px-4 py-2 rounded-full bg-violet-600 hover:bg-violet-500 text-white text-xs font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(124,58,237,0.35)]"
-        >
-          Empezar gratis
+          init →
         </Link>
       </div>
     </nav>
