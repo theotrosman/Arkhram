@@ -22,12 +22,7 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-[#050505]">
-      {/* Background orb */}
-      <div className="fixed inset-0 -z-10 pointer-events-none">
-        <div className="absolute top-0 left-1/2 w-[800px] h-[400px] bg-violet-900/10 rounded-full blur-[120px] -translate-x-1/2 -translate-y-1/2" />
-      </div>
-
+    <div className="h-screen flex flex-col" style={{ background: "#050202" }}>
       <ChatHeader
         sidebarOpen={sidebarOpen}
         onToggleSidebar={() => setSidebarOpen((s) => !s)}
@@ -40,37 +35,52 @@ export default function ChatPage() {
 
         <aside
           className={cn(
-            "shrink-0 overflow-hidden transition-all duration-300 border-l border-zinc-800/60 flex flex-col",
-            sidebarOpen ? "w-80" : "w-0 border-l-0"
+            "shrink-0 overflow-hidden transition-all duration-300 flex flex-col",
+            sidebarOpen ? "w-80" : "w-0"
           )}
+          style={{
+            borderLeft: sidebarOpen ? "1px solid rgba(255,255,255,0.05)" : "none",
+            background: "rgba(5,2,2,0.95)",
+          }}
         >
           {sidebarOpen && (
             <>
-              {/* Tabs */}
-              <div className="flex border-b border-zinc-800/60 bg-zinc-900/30">
+              {/* Gothic tabs */}
+              <div
+                className="flex shrink-0"
+                style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+              >
                 <button
                   onClick={() => setActiveTab("automations")}
-                  className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-medium transition-colors border-b-2",
-                    activeTab === "automations"
-                      ? "text-violet-400 border-violet-500"
-                      : "text-zinc-500 hover:text-zinc-300 border-transparent"
-                  )}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-3 font-mono text-[10px] tracking-[0.1em] transition-colors duration-200"
+                  style={{
+                    color: activeTab === "automations" ? "#8b1a1a" : "#2a2520",
+                    borderBottom: activeTab === "automations"
+                      ? "1px solid rgba(139,26,26,0.6)"
+                      : "1px solid transparent",
+                    background: activeTab === "automations"
+                      ? "rgba(139,26,26,0.04)"
+                      : "transparent",
+                  }}
                 >
                   <Zap className="w-3 h-3" />
-                  Flujos
+                  FLUJOS
                 </button>
                 <button
                   onClick={() => setActiveTab("projects")}
-                  className={cn(
-                    "flex-1 flex items-center justify-center gap-1.5 py-3 text-xs font-medium transition-colors border-b-2",
-                    activeTab === "projects"
-                      ? "text-violet-400 border-violet-500"
-                      : "text-zinc-500 hover:text-zinc-300 border-transparent"
-                  )}
+                  className="flex-1 flex items-center justify-center gap-1.5 py-3 font-mono text-[10px] tracking-[0.1em] transition-colors duration-200"
+                  style={{
+                    color: activeTab === "projects" ? "#8b1a1a" : "#2a2520",
+                    borderBottom: activeTab === "projects"
+                      ? "1px solid rgba(139,26,26,0.6)"
+                      : "1px solid transparent",
+                    background: activeTab === "projects"
+                      ? "rgba(139,26,26,0.04)"
+                      : "transparent",
+                  }}
                 >
                   <Folder className="w-3 h-3" />
-                  Proyectos
+                  PROYECTOS
                 </button>
               </div>
 

@@ -5,7 +5,6 @@ import { Automation, AutomationStatus } from "@/lib/types";
 import { AutomationCard } from "./AutomationCard";
 import { AutomationDetail } from "./AutomationDetail";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import { Loader2, Zap } from "lucide-react";
 
 interface AutomationsSidebarProps {
@@ -64,32 +63,43 @@ export function AutomationsSidebar({ refreshTrigger }: AutomationsSidebarProps) 
   }
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-zinc-700/60">
-        <div className="flex items-center gap-2">
-          <Zap className="w-4 h-4 text-violet-400" />
-          <h2 className="text-sm font-semibold text-zinc-200">Mis automatizaciones</h2>
-        </div>
+    <div className="h-full flex flex-col" style={{ background: "rgba(5,2,2,0.95)" }}>
+      {/* Header */}
+      <div
+        className="px-4 py-3 flex items-center gap-2 shrink-0"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+      >
+        <Zap className="w-3.5 h-3.5" style={{ color: "#8b1a1a" }} />
+        <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: "#5a5050" }}>
+          Mis flujos
+        </span>
       </div>
 
       {isLoading ? (
         <div className="flex-1 flex items-center justify-center">
-          <Loader2 className="w-5 h-5 animate-spin text-zinc-500" />
+          <Loader2 className="w-4 h-4 animate-spin" style={{ color: "#3a3530" }} />
         </div>
       ) : automations.length === 0 ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center p-6 gap-3">
-          <div className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center">
-            <Zap className="w-5 h-5 text-zinc-600" />
-          </div>
-          <p className="text-sm text-zinc-500">Todavía no tenés automatizaciones.</p>
-          <p className="text-xs text-zinc-600">Describí qué querés automatizar en el chat para empezar.</p>
+          <Zap className="w-6 h-6" style={{ color: "#1a1a1a" }} />
+          <p className="font-mono text-[11px]" style={{ color: "#2a2520" }}>
+            Sin automatizaciones todavía.
+          </p>
+          <p className="font-mono text-[10px] max-w-[180px] leading-relaxed" style={{ color: "#1a1a1a" }}>
+            Describí qué querés automatizar en el chat para empezar.
+          </p>
         </div>
       ) : (
         <ScrollArea className="flex-1">
-          <div className="p-3 space-y-2">
+          <div className="p-3 space-y-1">
             {automations.filter((a) => a.status === "active").length > 0 && (
               <>
-                <p className="text-xs text-zinc-600 px-1 pt-1">Activas</p>
+                <p
+                  className="font-mono text-[9px] tracking-widest uppercase px-1 py-1"
+                  style={{ color: "#2a2520" }}
+                >
+                  Activas
+                </p>
                 {automations
                   .filter((a) => a.status === "active")
                   .map((automation) => (
@@ -101,12 +111,20 @@ export function AutomationsSidebar({ refreshTrigger }: AutomationsSidebarProps) 
                       onClick={setSelectedAutomation}
                     />
                   ))}
-                <Separator className="bg-zinc-700/40 my-2" />
+                <div
+                  className="my-2"
+                  style={{ height: "1px", background: "rgba(255,255,255,0.04)" }}
+                />
               </>
             )}
             {automations.filter((a) => a.status !== "active").length > 0 && (
               <>
-                <p className="text-xs text-zinc-600 px-1">Inactivas</p>
+                <p
+                  className="font-mono text-[9px] tracking-widest uppercase px-1 py-1"
+                  style={{ color: "#2a2520" }}
+                >
+                  Inactivas
+                </p>
                 {automations
                   .filter((a) => a.status !== "active")
                   .map((automation) => (

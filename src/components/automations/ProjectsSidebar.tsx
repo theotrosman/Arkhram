@@ -2,25 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { Folder, FolderPlus, ChevronRight, X, Plus } from "lucide-react";
-import { ScrollArea } from "@/components/ui/scroll-area";
 import { Automation } from "@/lib/types";
 
 interface Project {
   id: string;
   name: string;
-  color: string;
   automationIds: string[];
   createdAt: string;
 }
-
-const PROJECT_COLORS = [
-  "bg-violet-500",
-  "bg-indigo-500",
-  "bg-blue-500",
-  "bg-emerald-500",
-  "bg-amber-500",
-  "bg-rose-500",
-];
 
 function loadProjects(): Project[] {
   if (typeof window === "undefined") return [];
@@ -46,7 +35,7 @@ export function ProjectsSidebar() {
   useEffect(() => {
     setProjects(loadProjects());
     fetch("/api/automations")
-      .then((r) => r.ok ? r.json() : { automations: [] })
+      .then((r) => (r.ok ? r.json() : { automations: [] }))
       .then((d) => setAutomations(d.automations ?? []))
       .catch(() => {});
   }, []);
@@ -56,7 +45,6 @@ export function ProjectsSidebar() {
     const proj: Project = {
       id: crypto.randomUUID(),
       name: newName.trim(),
-      color: PROJECT_COLORS[projects.length % PROJECT_COLORS.length],
       automationIds: [],
       createdAt: new Date().toISOString(),
     };
@@ -91,167 +79,265 @@ export function ProjectsSidebar() {
   );
 
   return (
-    <div className="h-full flex flex-col">
-      <div className="p-4 border-b border-zinc-700/60 flex items-center justify-between">
+    <div className="h-full flex flex-col" style={{ background: "rgba(5,2,2,0.95)" }}>
+      {/* Header */}
+      <div
+        className="px-4 py-3 flex items-center justify-between shrink-0"
+        style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+      >
         <div className="flex items-center gap-2">
-          <Folder className="w-4 h-4 text-violet-400" />
-          <h2 className="text-sm font-semibold text-zinc-200">Proyectos</h2>
+          <Folder className="w-3.5 h-3.5" style={{ color: "#8b1a1a" }} />
+          <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: "#5a5050" }}>
+            Proyectos
+          </span>
         </div>
         <button
           onClick={() => setCreating(true)}
-          className="p-1.5 rounded-lg hover:bg-zinc-800 text-zinc-500 hover:text-zinc-300 transition-colors"
+          className="transition-colors duration-200"
           title="Nuevo proyecto"
+          style={{ color: "#2a2520" }}
+          onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#8b1a1a")}
+          onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#2a2520")}
         >
           <Plus className="w-3.5 h-3.5" />
         </button>
       </div>
 
-      <ScrollArea className="flex-1">
-        <div className="p-3 space-y-1">
-          {/* Create project form */}
-          {creating && (
-            <div className="rounded-xl border border-violet-500/30 bg-violet-500/5 p-3 mb-2 space-y-2">
-              <p className="text-xs text-zinc-400 font-medium">Nuevo proyecto</p>
-              <input
-                autoFocus
-                type="text"
-                value={newName}
-                onChange={(e) => setNewName(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") createProject();
-                  if (e.key === "Escape") { setCreating(false); setNewName(""); }
-                }}
-                placeholder="Nombre del proyecto..."
-                className="w-full bg-zinc-900 border border-zinc-700 rounded-lg px-3 py-2 text-xs text-zinc-100 placeholder:text-zinc-600 focus:outline-none focus:border-violet-500/60 transition-colors"
-              />
-              <div className="flex gap-2">
-                <button
-                  onClick={createProject}
-                  className="flex-1 py-1.5 rounded-lg bg-violet-600 hover:bg-violet-500 text-white text-xs font-medium transition-colors"
-                >
-                  Crear
-                </button>
-                <button
-                  onClick={() => { setCreating(false); setNewName(""); }}
-                  className="px-3 py-1.5 rounded-lg border border-zinc-700 text-zinc-400 text-xs hover:text-zinc-200 transition-colors"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </div>
-          )}
-
-          {/* Projects list */}
-          {projects.length === 0 && !creating ? (
-            <div className="flex flex-col items-center justify-center py-10 text-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-zinc-800 flex items-center justify-center">
-                <FolderPlus className="w-4 h-4 text-zinc-600" />
-              </div>
-              <p className="text-xs text-zinc-500">Organizá tus automatizaciones en proyectos</p>
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto px-3 py-3 space-y-1"
+        style={{ scrollbarWidth: "thin", scrollbarColor: "rgba(139,26,26,0.15) transparent" }}
+      >
+        {/* Create form */}
+        {creating && (
+          <div
+            className="mb-3 p-3 space-y-2"
+            style={{
+              border: "1px solid rgba(139,26,26,0.2)",
+              background: "rgba(139,26,26,0.04)",
+            }}
+          >
+            <p className="font-mono text-[9px] tracking-widest uppercase" style={{ color: "#5a3030" }}>
+              Nuevo proyecto
+            </p>
+            <input
+              autoFocus
+              type="text"
+              value={newName}
+              onChange={(e) => setNewName(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") createProject();
+                if (e.key === "Escape") { setCreating(false); setNewName(""); }
+              }}
+              placeholder="Nombre del proyecto..."
+              className="w-full bg-transparent font-mono text-[11px] px-3 py-2 focus:outline-none"
+              style={{
+                border: "1px solid rgba(255,255,255,0.07)",
+                color: "#c4b8a8",
+                caretColor: "#8b1a1a",
+              }}
+              onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(139,26,26,0.4)")}
+              onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)")}
+            />
+            <div className="flex gap-2">
               <button
-                onClick={() => setCreating(true)}
-                className="text-xs text-violet-400 hover:text-violet-300 transition-colors"
+                onClick={createProject}
+                className="flex-1 py-1.5 font-mono text-[9px] tracking-widest transition-all duration-200"
+                style={{
+                  background: "rgba(139,26,26,0.7)",
+                  border: "1px solid rgba(139,26,26,0.4)",
+                  color: "#d4c9b8",
+                }}
               >
-                + Crear primer proyecto
+                CREAR
+              </button>
+              <button
+                onClick={() => { setCreating(false); setNewName(""); }}
+                className="px-3 py-1.5 font-mono text-[9px] transition-colors duration-200"
+                style={{
+                  border: "1px solid rgba(255,255,255,0.07)",
+                  color: "#3a3530",
+                }}
+              >
+                CANCELAR
               </button>
             </div>
-          ) : (
-            projects.map((project) => {
-              const projectAutomations = automations.filter((a) =>
-                project.automationIds.includes(a.id)
-              );
-              const isExpanded = expanded === project.id;
-              const isAssigning = assigning === project.id;
+          </div>
+        )}
 
-              return (
-                <div key={project.id} className="rounded-xl overflow-hidden">
-                  <button
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 hover:bg-zinc-800/60 rounded-xl transition-colors text-left group"
-                    onClick={() => setExpanded(isExpanded ? null : project.id)}
-                  >
-                    <div className={`w-2 h-2 rounded-full shrink-0 ${project.color}`} />
-                    <span className="flex-1 text-xs font-medium text-zinc-300 group-hover:text-white transition-colors truncate">
-                      {project.name}
-                    </span>
-                    <span className="text-[10px] text-zinc-600 shrink-0">
-                      {project.automationIds.length}
-                    </span>
-                    <ChevronRight
-                      className={`w-3 h-3 text-zinc-600 shrink-0 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
-                    />
-                    <button
-                      onClick={(e) => { e.stopPropagation(); deleteProject(project.id); }}
-                      className="opacity-0 group-hover:opacity-100 p-0.5 rounded hover:text-red-400 text-zinc-600 transition-all shrink-0"
-                    >
-                      <X className="w-3 h-3" />
-                    </button>
-                  </button>
+        {/* Empty state */}
+        {projects.length === 0 && !creating && (
+          <div className="flex flex-col items-center justify-center py-12 text-center gap-3">
+            <FolderPlus className="w-6 h-6" style={{ color: "#2a2520" }} />
+            <p className="font-mono text-[10px]" style={{ color: "#2a2520" }}>
+              Organizá tus flujos en proyectos
+            </p>
+            <button
+              onClick={() => setCreating(true)}
+              className="font-mono text-[9px] tracking-widest transition-colors duration-200"
+              style={{ color: "#5a3030" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#8b1a1a")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#5a3030")}
+            >
+              + CREAR PROYECTO
+            </button>
+          </div>
+        )}
 
-                  {isExpanded && (
-                    <div className="pl-5 pr-3 pb-2 space-y-1">
-                      {projectAutomations.length === 0 ? (
-                        <p className="text-[11px] text-zinc-600 px-2 py-1">Sin automatizaciones</p>
-                      ) : (
-                        projectAutomations.map((a) => (
-                          <div key={a.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-zinc-800/40">
-                            <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${a.status === "active" ? "bg-emerald-500" : "bg-zinc-600"}`} />
-                            <span className="text-[11px] text-zinc-400 truncate flex-1">{a.name}</span>
-                            <button
-                              onClick={() => toggleAutomation(project.id, a.id)}
-                              className="text-[10px] text-zinc-600 hover:text-red-400 transition-colors shrink-0"
-                            >
-                              quitar
-                            </button>
-                          </div>
-                        ))
-                      )}
-                      {automations.length > 0 && (
-                        <button
-                          onClick={() => setAssigning(isAssigning ? null : project.id)}
-                          className="text-[11px] text-violet-500 hover:text-violet-400 transition-colors px-2 py-1 block"
+        {/* Projects list */}
+        {projects.map((project) => {
+          const projectAutomations = automations.filter((a) =>
+            project.automationIds.includes(a.id)
+          );
+          const isExpanded = expanded === project.id;
+          const isAssigning = assigning === project.id;
+
+          return (
+            <div key={project.id}>
+              <button
+                className="w-full flex items-center gap-2 px-3 py-2 text-left group transition-all duration-150"
+                onClick={() => setExpanded(isExpanded ? null : project.id)}
+                style={{
+                  border: "1px solid rgba(255,255,255,0.04)",
+                  background: isExpanded ? "rgba(139,26,26,0.04)" : "transparent",
+                }}
+                onMouseEnter={(e) => {
+                  if (!isExpanded) (e.currentTarget as HTMLButtonElement).style.background = "rgba(255,255,255,0.02)";
+                }}
+                onMouseLeave={(e) => {
+                  if (!isExpanded) (e.currentTarget as HTMLButtonElement).style.background = "transparent";
+                }}
+              >
+                <div
+                  className="w-1.5 h-1.5 shrink-0"
+                  style={{ background: "#8b1a1a", opacity: 0.6 }}
+                />
+                <span
+                  className="flex-1 font-mono text-[11px] truncate"
+                  style={{ color: "#8a7060" }}
+                >
+                  {project.name}
+                </span>
+                <span className="font-mono text-[9px]" style={{ color: "#2a2520" }}>
+                  {project.automationIds.length}
+                </span>
+                <ChevronRight
+                  className="w-3 h-3 shrink-0 transition-transform duration-200"
+                  style={{
+                    color: "#2a2520",
+                    transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
+                  }}
+                />
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteProject(project.id);
+                  }}
+                  className="opacity-0 group-hover:opacity-100 transition-opacity duration-150 shrink-0"
+                  style={{ color: "#5a3030" }}
+                  onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#cc4444")}
+                  onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#5a3030")}
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              </button>
+
+              {isExpanded && (
+                <div
+                  className="ml-4 mr-1 mb-1 px-3 py-2 space-y-1"
+                  style={{ borderLeft: "1px solid rgba(139,26,26,0.15)" }}
+                >
+                  {projectAutomations.length === 0 ? (
+                    <p className="font-mono text-[10px]" style={{ color: "#2a2520" }}>
+                      Sin flujos asignados
+                    </p>
+                  ) : (
+                    projectAutomations.map((a) => (
+                      <div
+                        key={a.id}
+                        className="flex items-center gap-2 py-1"
+                      >
+                        <div
+                          className="w-1 h-1 shrink-0"
+                          style={{
+                            background: a.status === "active" ? "#6a8a5a" : "#3a3530",
+                          }}
+                        />
+                        <span
+                          className="flex-1 font-mono text-[10px] truncate"
+                          style={{ color: "#5a5050" }}
                         >
-                          {isAssigning ? "Cerrar" : "+ Agregar automatización"}
+                          {a.name}
+                        </span>
+                        <button
+                          onClick={() => toggleAutomation(project.id, a.id)}
+                          className="font-mono text-[9px] transition-colors duration-150 shrink-0"
+                          style={{ color: "#2a2520" }}
+                          onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#cc4444")}
+                          onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#2a2520")}
+                        >
+                          quitar
                         </button>
-                      )}
-                      {isAssigning && (
-                        <div className="space-y-1 pt-1">
-                          {automations
-                            .filter((a) => !project.automationIds.includes(a.id))
-                            .map((a) => (
-                              <button
-                                key={a.id}
-                                onClick={() => { toggleAutomation(project.id, a.id); setAssigning(null); }}
-                                className="w-full text-left px-2 py-1.5 rounded-lg hover:bg-zinc-800/60 text-[11px] text-zinc-400 hover:text-zinc-200 transition-colors truncate"
-                              >
-                                {a.name}
-                              </button>
-                            ))}
-                          {automations.filter((a) => !project.automationIds.includes(a.id)).length === 0 && (
-                            <p className="text-[11px] text-zinc-600 px-2">Todas asignadas</p>
-                          )}
-                        </div>
-                      )}
+                      </div>
+                    ))
+                  )}
+                  {automations.length > 0 && (
+                    <button
+                      onClick={() => setAssigning(isAssigning ? null : project.id)}
+                      className="font-mono text-[9px] tracking-widest transition-colors duration-150 pt-1"
+                      style={{ color: "#4a3030" }}
+                      onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#8b1a1a")}
+                      onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#4a3030")}
+                    >
+                      {isAssigning ? "CERRAR" : "+ AGREGAR FLUJO"}
+                    </button>
+                  )}
+                  {isAssigning && (
+                    <div className="space-y-0.5 pt-1">
+                      {automations
+                        .filter((a) => !project.automationIds.includes(a.id))
+                        .map((a) => (
+                          <button
+                            key={a.id}
+                            onClick={() => { toggleAutomation(project.id, a.id); setAssigning(null); }}
+                            className="w-full text-left font-mono text-[10px] px-2 py-1 truncate transition-colors duration-150"
+                            style={{ color: "#3a3530" }}
+                            onMouseEnter={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#8a7060")}
+                            onMouseLeave={(e) => ((e.currentTarget as HTMLButtonElement).style.color = "#3a3530")}
+                          >
+                            {a.name}
+                          </button>
+                        ))}
                     </div>
                   )}
                 </div>
-              );
-            })
-          )}
-
-          {/* Unassigned automations */}
-          {unassigned.length > 0 && projects.length > 0 && (
-            <div className="mt-4 pt-3 border-t border-zinc-800/60">
-              <p className="text-[11px] text-zinc-600 px-2 mb-1.5">Sin proyecto</p>
-              {unassigned.map((a) => (
-                <div key={a.id} className="flex items-center gap-2 px-2 py-1.5 rounded-lg hover:bg-zinc-800/40">
-                  <div className={`w-1.5 h-1.5 rounded-full shrink-0 ${a.status === "active" ? "bg-emerald-500" : "bg-zinc-600"}`} />
-                  <span className="text-[11px] text-zinc-500 truncate">{a.name}</span>
-                </div>
-              ))}
+              )}
             </div>
-          )}
-        </div>
-      </ScrollArea>
+          );
+        })}
+
+        {/* Unassigned section */}
+        {unassigned.length > 0 && projects.length > 0 && (
+          <div
+            className="mt-3 pt-3 space-y-1"
+            style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
+          >
+            <p className="font-mono text-[9px] tracking-widest px-1 mb-1" style={{ color: "#2a2520" }}>
+              SIN PROYECTO
+            </p>
+            {unassigned.map((a) => (
+              <div key={a.id} className="flex items-center gap-2 px-2 py-1.5">
+                <div
+                  className="w-1 h-1 shrink-0"
+                  style={{ background: a.status === "active" ? "#6a8a5a" : "#3a3530" }}
+                />
+                <span className="font-mono text-[10px] truncate" style={{ color: "#3a3530" }}>
+                  {a.name}
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }

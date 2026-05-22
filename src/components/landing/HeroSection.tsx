@@ -127,7 +127,6 @@ function Particle({ x, y, size, duration, delay }: { x: number; y: number; size:
 export function HeroSection() {
   const [terminalLines, setTerminalLines] = useState<typeof TERMINAL_LINES>([]);
   const [mounted, setMounted] = useState(false);
-  const [count, setCount] = useState(0);
   const [bats, setBats] = useState<Array<{ id: number; yPos: number; size: number; direction: "ltr" | "rtl"; duration: number; delay: number }>>([]);
   const [particles] = useState(() =>
     Array.from({ length: 25 }, (_, i) => ({
@@ -157,16 +156,6 @@ export function HeroSection() {
     setMounted(true);
     scheduleBats();
 
-    // Counter animation
-    let n = 0;
-    const target = 1847;
-    const step = Math.ceil(target / 60);
-    const countId = setInterval(() => {
-      n = Math.min(n + step + Math.floor(Math.random() * step), target);
-      setCount(n);
-      if (n >= target) clearInterval(countId);
-    }, 20);
-
     // Terminal animation loop
     const runTerminal = () => {
       setTerminalLines([]);
@@ -185,7 +174,6 @@ export function HeroSection() {
     runTerminal();
 
     return () => {
-      clearInterval(countId);
       if (loopRef.current) clearTimeout(loopRef.current);
     };
   }, [scheduleBats]);
@@ -338,23 +326,6 @@ export function HeroSection() {
             multiagent coordination. An operating system for thought — not another chatbot.
           </p>
 
-          {/* Live counter */}
-          <div className="mb-10 flex items-baseline gap-3">
-            <span
-              className="font-mono font-black"
-              style={{
-                fontSize: "clamp(32px, 4vw, 52px)",
-                color: "#d4c9b8",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              {mounted ? count.toLocaleString("es-AR") : "—"}
-            </span>
-            <span className="font-mono text-[10px] tracking-widest uppercase" style={{ color: "#3a3530" }}>
-              executions today
-            </span>
-          </div>
-
           {/* CTAs */}
           <div className="flex flex-col sm:flex-row gap-3">
             <Link
@@ -472,7 +443,7 @@ export function HeroSection() {
               }}
             >
               <span className="font-mono text-[9px]" style={{ color: "#2a1a1a" }}>
-                UPTIME: 99.97% · NODE:CENTRAL · 27 FLOWS ACTIVE
+                ARKHRAM OS · NODE:CENTRAL · LLAMA 3.3 / 70B
               </span>
               <span className="font-mono text-[9px]" style={{ color: "#3a2020" }}>
                 {mounted ? new Date().toISOString().slice(0, 10) : "----"}

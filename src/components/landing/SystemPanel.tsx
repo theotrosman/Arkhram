@@ -20,12 +20,12 @@ const DEFINITIONS = [
 const TECH = [
   ["Runtime",        "n8n self-hosted"],
   ["Intelligence",   "Llama 3.3 / 70B"],
-  ["Avg latency",    "4.2s"],
+  ["Inference",      "Groq API"],
   ["Trigger types",  "18"],
   ["Connectors",     "40+"],
   ["Auth layer",     "Supabase / OAuth2"],
-  ["Uptime",         "99.97%"],
-  ["Architecture",   "Multi-agent"],
+  ["Language",       "Natural language input"],
+  ["Architecture",   "Agent + workflow"],
 ];
 
 const INTEGRATIONS = [

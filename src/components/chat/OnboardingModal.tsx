@@ -24,14 +24,29 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
     onComplete({ name: name.trim(), business_description: business.trim(), industry });
   }
 
+  const progress = ((step + 1) / 3) * 100;
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm px-4">
-      <div className="w-full max-w-md rounded-2xl border border-zinc-800 bg-zinc-950 shadow-2xl shadow-black/60 overflow-hidden">
-        {/* Top bar */}
-        <div className="h-1 bg-zinc-800">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      style={{ background: "rgba(0,0,0,0.85)", backdropFilter: "blur(8px)" }}
+    >
+      <div
+        className="w-full max-w-md overflow-hidden"
+        style={{
+          background: "#060303",
+          border: "1px solid rgba(139,26,26,0.25)",
+          boxShadow: "0 24px 80px rgba(0,0,0,0.9)",
+        }}
+      >
+        {/* Progress bar */}
+        <div className="h-px" style={{ background: "rgba(255,255,255,0.05)" }}>
           <div
-            className="h-full bg-gradient-to-r from-violet-600 to-indigo-500 transition-all duration-500"
-            style={{ width: `${((step + 1) / 3) * 100}%` }}
+            className="h-full transition-all duration-500"
+            style={{
+              width: `${progress}%`,
+              background: "linear-gradient(90deg, rgba(139,26,26,0.8), rgba(192,100,60,0.4))",
+            }}
           />
         </div>
 
@@ -39,9 +54,25 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
           {step === 0 && (
             <div className="space-y-6">
               <div>
-                <p className="text-xs text-violet-400 uppercase tracking-widest mb-2">Bienvenido</p>
-                <h2 className="text-2xl font-bold text-white">¿Cómo te llamás?</h2>
-                <p className="text-zinc-500 text-sm mt-1">Para que pueda personalizarte la experiencia.</p>
+                <p
+                  className="font-mono text-[9px] tracking-[0.3em] uppercase mb-3"
+                  style={{ color: "#8b1a1a" }}
+                >
+                  / CONFIGURACIÓN INICIAL
+                </p>
+                <h2
+                  style={{
+                    fontFamily: "'Cinzel', serif",
+                    fontSize: "20px",
+                    color: "#d4c9b8",
+                    letterSpacing: "0.03em",
+                  }}
+                >
+                  ¿Cómo te llamás?
+                </h2>
+                <p className="font-mono text-[11px] mt-2" style={{ color: "#3a3530" }}>
+                  Para personalizar la experiencia.
+                </p>
               </div>
               <input
                 autoFocus
@@ -50,14 +81,21 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
                 onChange={(e) => setName(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && name.trim() && setStep(1)}
                 placeholder="Tu nombre..."
-                className="w-full bg-zinc-900 border border-zinc-800 focus:border-violet-500/60 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none transition-colors text-lg"
+                className="w-full bg-transparent font-mono text-[13px] px-4 py-3 focus:outline-none"
+                style={{
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  color: "#d4c9b8",
+                  caretColor: "#8b1a1a",
+                }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(139,26,26,0.5)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
               />
               <button
                 onClick={() => name.trim() && setStep(1)}
                 disabled={!name.trim()}
-                className="w-full py-3 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(124,58,237,0.3)]"
+                className="w-full py-3 font-mono text-[10px] tracking-[0.2em] disabled:opacity-30 btn-gothic"
               >
-                Continuar →
+                CONTINUAR →
               </button>
             </div>
           )}
@@ -65,20 +103,49 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
           {step === 1 && (
             <div className="space-y-6">
               <div>
-                <p className="text-xs text-violet-400 uppercase tracking-widest mb-2">Tu negocio</p>
-                <h2 className="text-2xl font-bold text-white">¿En qué rubro estás?</h2>
-                <p className="text-zinc-500 text-sm mt-1">Así puedo darte ejemplos relevantes para vos.</p>
+                <p
+                  className="font-mono text-[9px] tracking-[0.3em] uppercase mb-3"
+                  style={{ color: "#8b1a1a" }}
+                >
+                  / TU NEGOCIO
+                </p>
+                <h2
+                  style={{
+                    fontFamily: "'Cinzel', serif",
+                    fontSize: "20px",
+                    color: "#d4c9b8",
+                    letterSpacing: "0.03em",
+                  }}
+                >
+                  ¿En qué rubro?
+                </h2>
+                <p className="font-mono text-[11px] mt-2" style={{ color: "#3a3530" }}>
+                  Para darte ejemplos relevantes.
+                </p>
               </div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="grid grid-cols-2 gap-1.5">
                 {INDUSTRIES.map((ind) => (
                   <button
                     key={ind}
                     onClick={() => setIndustry(ind)}
-                    className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all duration-150 ${
-                      industry === ind
-                        ? "border-violet-500 bg-violet-500/15 text-violet-300"
-                        : "border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
-                    }`}
+                    className="text-left px-3 py-2.5 font-mono text-[10px] transition-all duration-150"
+                    style={{
+                      border: `1px solid ${industry === ind ? "rgba(139,26,26,0.5)" : "rgba(255,255,255,0.06)"}`,
+                      background: industry === ind ? "rgba(139,26,26,0.08)" : "transparent",
+                      color: industry === ind ? "#c4b8a8" : "#4a4540",
+                    }}
+                    onMouseEnter={(e) => {
+                      if (industry !== ind) {
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(139,26,26,0.3)";
+                        (e.currentTarget as HTMLButtonElement).style.color = "#8a7060";
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (industry !== ind) {
+                        (e.currentTarget as HTMLButtonElement).style.borderColor = "rgba(255,255,255,0.06)";
+                        (e.currentTarget as HTMLButtonElement).style.color = "#4a4540";
+                      }
+                    }}
                   >
                     {ind}
                   </button>
@@ -87,16 +154,20 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
               <div className="flex gap-2">
                 <button
                   onClick={() => setStep(0)}
-                  className="px-4 py-3 rounded-xl border border-zinc-800 text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
+                  className="px-4 py-3 font-mono text-[10px] transition-colors duration-200"
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    color: "#3a3530",
+                  }}
                 >
-                  ← Volver
+                  ← VOLVER
                 </button>
                 <button
                   onClick={() => industry && setStep(2)}
                   disabled={!industry}
-                  className="flex-1 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-30 text-white font-semibold transition-all duration-200"
+                  className="flex-1 py-3 font-mono text-[10px] tracking-[0.2em] disabled:opacity-30 btn-gothic"
                 >
-                  Continuar →
+                  CONTINUAR →
                 </button>
               </div>
             </div>
@@ -105,30 +176,57 @@ export function OnboardingModal({ onComplete }: OnboardingModalProps) {
           {step === 2 && (
             <div className="space-y-6">
               <div>
-                <p className="text-xs text-violet-400 uppercase tracking-widest mb-2">Último paso</p>
-                <h2 className="text-2xl font-bold text-white">Contame un poco más</h2>
-                <p className="text-zinc-500 text-sm mt-1">¿Cómo se llama tu negocio o qué hacés exactamente? (opcional)</p>
+                <p
+                  className="font-mono text-[9px] tracking-[0.3em] uppercase mb-3"
+                  style={{ color: "#8b1a1a" }}
+                >
+                  / ÚLTIMO PASO
+                </p>
+                <h2
+                  style={{
+                    fontFamily: "'Cinzel', serif",
+                    fontSize: "20px",
+                    color: "#d4c9b8",
+                    letterSpacing: "0.03em",
+                  }}
+                >
+                  Contame un poco más
+                </h2>
+                <p className="font-mono text-[11px] mt-2" style={{ color: "#3a3530" }}>
+                  ¿Cómo se llama tu negocio o qué hacés? (opcional)
+                </p>
               </div>
               <textarea
                 value={business}
                 onChange={(e) => setBusiness(e.target.value)}
-                placeholder={`Ej: "Tengo una clínica dental en Palermo, 3 odontólogos"`}
+                placeholder={`Ej: "Clínica dental en Palermo, 3 odontólogos"`}
                 rows={3}
-                className="w-full bg-zinc-900 border border-zinc-800 focus:border-violet-500/60 rounded-xl px-4 py-3 text-white placeholder:text-zinc-600 focus:outline-none transition-colors resize-none text-sm"
+                className="w-full bg-transparent font-mono text-[12px] px-4 py-3 focus:outline-none resize-none"
+                style={{
+                  border: "1px solid rgba(255,255,255,0.08)",
+                  color: "#c4b8a8",
+                  caretColor: "#8b1a1a",
+                }}
+                onFocus={(e) => (e.currentTarget.style.borderColor = "rgba(139,26,26,0.5)")}
+                onBlur={(e) => (e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)")}
               />
               <div className="flex gap-2">
                 <button
                   onClick={() => setStep(1)}
-                  className="px-4 py-3 rounded-xl border border-zinc-800 text-zinc-500 hover:text-zinc-300 text-sm transition-colors"
+                  className="px-4 py-3 font-mono text-[10px] transition-colors duration-200"
+                  style={{
+                    border: "1px solid rgba(255,255,255,0.06)",
+                    color: "#3a3530",
+                  }}
                 >
-                  ← Volver
+                  ← VOLVER
                 </button>
                 <button
                   onClick={handleFinish}
                   disabled={saving}
-                  className="flex-1 py-3 rounded-xl bg-violet-600 hover:bg-violet-500 disabled:opacity-50 text-white font-semibold transition-all duration-200 hover:shadow-[0_0_20px_rgba(124,58,237,0.3)]"
+                  className="flex-1 py-3 font-mono text-[10px] tracking-[0.2em] disabled:opacity-50 btn-gothic"
                 >
-                  {saving ? "Guardando..." : "¡Empezar!"}
+                  {saving ? "GUARDANDO..." : "INICIAR SISTEMA →"}
                 </button>
               </div>
             </div>

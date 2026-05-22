@@ -6,43 +6,36 @@ const DIRS = [
   {
     path: "intelligence/",
     entries: ["web-scraping.wf", "news-monitor.wf", "research-agent.wf", "pdf-report.wf"],
-    active: 12,
     color: "#8b1a1a",
   },
   {
     path: "ecommerce/",
     entries: ["new-sale.wf", "low-stock.wf", "post-sale.wf", "refund-handler.wf"],
-    active: 31,
     color: "#8b1a1a",
   },
   {
     path: "healthcare/",
     entries: ["appointments.wf", "reminder-48h.wf", "patient-intake.wf", "cancellation.wf"],
-    active: 14,
     color: "#8b1a1a",
   },
   {
     path: "finance/",
     entries: ["invoice-processor.wf", "expense-tracker.wf", "reports.wf"],
-    active: 8,
     color: "#8b1a1a",
   },
   {
     path: "agencies/",
     entries: ["client-onboarding.wf", "content-approval.wf", "weekly-report.wf"],
-    active: 7,
     color: "#8b1a1a",
   },
   {
     path: "hr/",
     entries: ["onboarding.wf", "leave-request.wf", "cv-processor.wf"],
-    active: 4,
     color: "#8b1a1a",
   },
   {
     path: "custom/",
     entries: ["webhook.wf", "schedule.wf", "[any_trigger].wf"],
-    active: 0,
     color: "#3a3530",
   },
 ];
@@ -96,7 +89,7 @@ export function DirectorySection() {
           </p>
           <div className="mt-4 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.03)" }}>
             <p className="font-mono text-[9px]" style={{ color: "#2a2520" }}>
-              76 active flows across all domains
+              Plantillas generadas por lenguaje natural
             </p>
           </div>
         </div>
@@ -131,23 +124,13 @@ export function DirectorySection() {
                   </span>
                   <span
                     className="transition-colors duration-200"
-                    style={{ color: dir.active > 0 ? "#8b1a1a" : "#3a3530" }}
+                    style={{ color: dir.color === "#8b1a1a" ? "#8b1a1a" : "#3a3530" }}
                   >
                     {dir.path}
                   </span>
-                  {dir.active > 0 ? (
-                    <span className="ml-auto font-mono text-[9px] flex items-center gap-1.5" style={{ color: "#4a3030" }}>
-                      <span
-                        className="w-1 h-1 rounded-full animate-pulse"
-                        style={{ background: "#8b1a1a" }}
-                      />
-                      {dir.active} active
-                    </span>
-                  ) : (
-                    <span className="ml-auto font-mono text-[9px]" style={{ color: "#2a2520" }}>
-                      configurable
-                    </span>
-                  )}
+                  <span className="ml-auto font-mono text-[9px]" style={{ color: "#2a2520" }}>
+                    {dir.color === "#8b1a1a" ? "disponible" : "configurable"}
+                  </span>
                 </div>
 
                 {/* Files */}
