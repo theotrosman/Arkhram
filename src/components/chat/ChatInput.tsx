@@ -3,7 +3,7 @@
 import { useRef, useEffect } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { SendHorizontal } from "lucide-react";
+import { SendHorizontal, Paperclip } from "lucide-react";
 
 interface ChatInputProps {
   value: string;
@@ -13,6 +13,9 @@ interface ChatInputProps {
   placeholder?: string;
 }
 
+const ALLOWED_TYPES = ["text/plain", "text/markdown", "text/csv", "application/json"];
+const ALLOWED_EXTENSIONS = [".txt", ".md", ".csv", ".json"];
+
 export function ChatInput({
   value,
   onChange,
@@ -21,6 +24,7 @@ export function ChatInput({
   placeholder = "Describí qué querés automatizar...",
 }: ChatInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const fileRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!disabled && textareaRef.current) {
@@ -37,8 +41,46 @@ export function ChatInput({
     }
   }
 
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    const ext = "." + file.name.split(".").pop()?.toLowerCase();
+    if (!ALLOWED_TYPES.includes(file.type) && !ALLOWED_EXTENSIONS.includes(ext)) {
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (ev) => {
+      const content = ev.target?.result as string;
+      const header = `[Archivo adjunto: ${file.name}]\n\`\`\`\n${content.slice(0, 4000)}\n\`\`\`\n\n`;
+      onChange(header + value);
+      textareaRef.current?.focus();
+    };
+    reader.readAsText(file);
+    e.target.value = "";
+  }
+
   return (
     <div className="flex gap-2 items-end bg-zinc-800 border border-zinc-700 rounded-2xl p-2 focus-within:border-violet-500/60 transition-colors">
+      <input
+        ref={fileRef}
+        type="file"
+        accept=".txt,.md,.csv,.json"
+        className="hidden"
+        onChange={handleFileChange}
+      />
+      <Button
+        type="button"
+        variant="ghost"
+        size="icon"
+        onClick={() => fileRef.current?.click()}
+        disabled={disabled}
+        className="shrink-0 text-zinc-500 hover:text-zinc-300 hover:bg-zinc-700/50 rounded-xl h-10 w-10"
+        title="Adjuntar archivo (.txt, .md, .csv, .json)"
+      >
+        <Paperclip className="w-4 h-4" />
+      </Button>
       <Textarea
         ref={textareaRef}
         value={value}

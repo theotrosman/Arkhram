@@ -18,7 +18,7 @@ export function ChatPreview() {
 
   useEffect(() => {
     if (visible >= conversation.length) return;
-    const t = setTimeout(() => setVisible((v) => v + 1), 900);
+    const t = setTimeout(() => setVisible((v) => v + 1), 480);
     return () => clearTimeout(t);
   }, [visible]);
 

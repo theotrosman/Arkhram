@@ -54,7 +54,7 @@ export function ChatHeader({ sidebarOpen, onToggleSidebar }: ChatHeaderProps) {
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all"
         >
           {sidebarOpen ? <X className="w-3.5 h-3.5" /> : <Menu className="w-3.5 h-3.5" />}
-          <span className="hidden sm:inline">Automatizaciones</span>
+          <span className="hidden sm:inline">Panel</span>
         </button>
 
         {/* User menu */}
