@@ -1,24 +1,23 @@
 "use client";
 
 const SPECS = [
-  { value: "Llama 3.3", sub: "70B", label: "modelo de inteligencia",  accent: false },
-  { value: "n8n",        sub: "self-hosted", label: "runtime de ejecución", accent: true },
-  { value: "40+",        sub: "",    label: "conectores nativos",     accent: false },
-  { value: "18",         sub: "",    label: "tipos de trigger",       accent: false },
-  { value: "Groq",       sub: "API", label: "inferencia ultrarrápida",accent: false },
+  { value: "Llama 3.3", sub: "70B",          label: "modelo de inteligencia", accent: false },
+  { value: "n8n",        sub: "self-hosted",  label: "runtime de ejecución",   accent: true  },
+  { value: "40+",        sub: "conectores",   label: "sistemas nativos",        accent: false },
+  { value: "18",         sub: "trigger types",label: "tipos de activación",     accent: false },
 ];
 
 export function StatsRow() {
   return (
     <section style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-      <div className="grid grid-cols-2 md:grid-cols-5">
+      <div className="grid grid-cols-2 md:grid-cols-4">
         {SPECS.map((spec, i) => (
           <div
             key={spec.label}
             className="px-8 py-10 relative group"
             style={{
               borderRight: i < SPECS.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
-              borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none",
+              borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none", // mobile: 2-col, divider after row 1
               background: "transparent",
               transition: "background 0.4s ease",
             }}

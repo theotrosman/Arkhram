@@ -5,7 +5,6 @@ import { useState, useEffect } from "react";
 
 export function LandingNav() {
   const [time, setTime] = useState("--:--:--");
-  const [flows, setFlows] = useState(27);
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -14,10 +13,7 @@ export function LandingNav() {
       setTime([d.getHours(), d.getMinutes(), d.getSeconds()].map((n) => String(n).padStart(2, "0")).join(":"));
     };
     tick();
-    const id = setInterval(() => {
-      tick();
-      if (Math.random() > 0.85) setFlows((f) => Math.max(20, f + (Math.random() > 0.5 ? 1 : -1)));
-    }, 1000);
+    const id = setInterval(tick, 1000);
 
     const onScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", onScroll, { passive: true });
@@ -64,7 +60,7 @@ export function LandingNav() {
             className="w-1.5 h-1.5 rounded-full animate-pulse"
             style={{ background: "#8b1a1a", boxShadow: "0 0 6px rgba(139,26,26,0.8)" }}
           />
-          <span style={{ color: "#8b1a1a" }}>{flows} agents active</span>
+          <span style={{ color: "#8b1a1a" }}>ARKHRAM OS · ACTIVO</span>
         </span>
         <span style={{ color: "#2a2520" }}>│</span>
         <span style={{ color: "#3a3530" }}>{time} UTC-3</span>

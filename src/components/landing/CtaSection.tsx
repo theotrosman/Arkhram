@@ -102,8 +102,8 @@ export function CtaSection() {
                 OPERATIONAL · ACCEPTING CONNECTIONS
               </span>
             </div>
-            <p className="font-mono text-[10px]" style={{ color: "#2a2520" }}>
-              {time} UTC-3 · 27 agents active
+            <p className="font-mono text-[10px]" style={{ color: "#2a2020" }}>
+              {time} UTC-3 · Llama 3.3 / 70B via Groq
             </p>
           </div>
 
@@ -137,7 +137,7 @@ export function CtaSection() {
           </div>
 
           <p className="font-mono text-[9px]" style={{ color: "#1a1a1a" }}>
-            SYS:2.1 / NODE:CENTRAL / UPTIME:99.97% / BUILD:STABLE
+            SYS:2.1 / NODE:CENTRAL / RUNTIME:n8n / BUILD:STABLE
           </p>
         </div>
       </div>

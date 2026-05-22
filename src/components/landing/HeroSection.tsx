@@ -272,7 +272,7 @@ export function HeroSection() {
       </div>
 
       {/* ── MAIN CONTENT ── */}
-      <div className="relative grid grid-cols-1 lg:grid-cols-2 min-h-screen pt-12" style={{ zIndex: 10 }}>
+      <div className="relative grid grid-cols-1 lg:grid-cols-2 min-h-screen" style={{ zIndex: 10 }}>
 
         {/* LEFT — Hero text */}
         <div className="flex flex-col justify-center px-8 lg:px-16 py-20 lg:py-0">
