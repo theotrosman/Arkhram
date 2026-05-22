@@ -457,6 +457,31 @@
   z-index: 2;
 }
 
+/* ── ORG LANDING ADDITIONS ── */
+
+/* Chromatic aberration on glitch trigger */
+@keyframes glitch-ca {
+  0%, 88%, 100% { text-shadow: none; }
+  89% { text-shadow: 2px 0 rgba(139,26,26,0.7), -2px 0 rgba(60,20,80,0.5); }
+  90% { text-shadow: -2px 0 rgba(139,26,26,0.7), 2px 0 rgba(60,20,80,0.5); }
+  91% { text-shadow: none; }
+  95% { text-shadow: 3px 0 rgba(139,26,26,0.5), -1px 0 rgba(60,20,80,0.4); }
+  96% { text-shadow: none; }
+}
+.animate-glitch-ca { animation: glitch-ca 8s ease-in-out infinite; }
+
+/* Blood pulse for status dots */
+@keyframes pulse-blood-dot {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px rgba(139,26,26,0.5); }
+  50%       { opacity: 0.5; box-shadow: 0 0 12px rgba(139,26,26,0.3); }
+}
+
+/* Org section fade entrance */
+@keyframes org-fade-in {
+  from { opacity: 0; transform: translateY(50px) scale(0.98); filter: blur(8px); }
+  to   { opacity: 1; transform: translateY(0) scale(1); filter: blur(0px); }
+}
+
 /* ── MOBILE OPTIMIZATIONS ── */
 @media (prefers-reduced-motion: reduce) {
   .animate-fog,
