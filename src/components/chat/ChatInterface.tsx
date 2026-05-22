@@ -6,6 +6,7 @@ import { ChatMessage, TypingIndicator } from "./ChatMessage";
 import { ChatInput } from "./ChatInput";
 import { SkillChips } from "./SkillChips";
 import { AutomationConfig, ChatMessage as ChatMessageType } from "@/lib/types";
+import { createClient } from "@/lib/supabase/client";
 import { getUserId } from "@/lib/supabase";
 import { CheckCircle2, Loader2 } from "lucide-react";
 
@@ -79,7 +80,9 @@ export function ChatInterface({ onAutomationCreated }: ChatInterfaceProps) {
 
   async function generateFlow(config: AutomationConfig) {
     setIsGenerating(true);
-    const userId = getUserId();
+    const supabase = createClient();
+    const { data: { user } } = await supabase.auth.getUser();
+    const userId = user?.id ?? getUserId();
 
     try {
       const response = await fetch("/api/generate-flow", {
