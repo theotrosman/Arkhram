@@ -53,10 +53,10 @@ export async function POST(req: NextRequest) {
     }
 
     // Extract AI notes to save to profile (simple heuristic: look for [NOTA:] tags)
-    const noteMatch = content.match(/\[NOTA:(.*?)\]/s);
+    const noteMatch = content.match(/\[NOTA:([\s\S]*?)\]/);
     const profileNote = noteMatch ? noteMatch[1].trim() : null;
 
-    return NextResponse.json({ content: content.replace(/\[NOTA:.*?\]/gs, "").trim(), automationConfig, profileNote });
+    return NextResponse.json({ content: content.replace(/\[NOTA:[\s\S]*?\]/g, "").trim(), automationConfig, profileNote });
   } catch (error) {
     console.error("Chat API error:", error);
     return NextResponse.json(
