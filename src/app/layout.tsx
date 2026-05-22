@@ -9,6 +9,9 @@ export const metadata: Metadata = {
   title: "ARKHRAM — The Dark Architecture Of Intelligence",
   description: "Autonomous AI infrastructure. Agents, automations, web scraping, document generation. An operating system for thought.",
   keywords: ["AI automation", "autonomous agents", "web scraping", "workflow automation", "artificial intelligence"],
+  icons: {
+    icon: "/favicon.svg",
+  },
   verification: {
     google: "KKEVjHH5TfJs0ePa0DyNVyeO67NlUBLvcd-g37Qv_Po",
   },
@@ -29,6 +32,7 @@ export default function RootLayout({
   return (
     <html lang="es" className="h-full">
       <head>
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link

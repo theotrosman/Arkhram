@@ -119,10 +119,6 @@
 ::-webkit-scrollbar-thumb { background: rgba(139,26,26,0.4); border-radius: 0; }
 ::-webkit-scrollbar-thumb:hover { background: rgba(139,26,26,0.7); }
 
-/* ── CURSOR ── */
-* { cursor: none !important; }
-a, button, [role="button"] { cursor: none !important; }
-
 /* ── TYPOGRAPHY ── */
 .font-gothic {
   font-family: 'Cinzel', 'Playfair Display', Georgia, serif;
