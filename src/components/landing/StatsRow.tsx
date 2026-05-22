@@ -3,11 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 
 const STATS = [
-  { value: 1847, suffix: "", label: "ejecuciones hoy", mono: true },
-  { value: 27,   suffix: "",  label: "flows activos ahora", mono: false },
-  { value: 4.2,  suffix: "s", label: "tiempo prom / ejecución", mono: false },
-  { value: 99.97, suffix: "%", label: "uptime · 30 días", mono: false },
-  { value: 12,   suffix: "",  label: "rubros soportados", mono: false },
+  { value: 1847,  suffix: "",  label: "executions today",       accent: false },
+  { value: 27,    suffix: "",  label: "agents active now",      accent: true  },
+  { value: 4.2,   suffix: "s", label: "avg execution time",     accent: false },
+  { value: 99.97, suffix: "%", label: "uptime · 30 days",       accent: false },
+  { value: 40,    suffix: "+", label: "connected systems",      accent: false },
 ];
 
 function AnimatedNumber({ target, suffix }: { target: number; suffix: string }) {
@@ -42,17 +42,48 @@ function AnimatedNumber({ target, suffix }: { target: number; suffix: string }) 
 
 export function StatsRow() {
   return (
-    <section className="border-b border-zinc-800">
+    <section style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
       <div className="grid grid-cols-2 md:grid-cols-5">
         {STATS.map((stat, i) => (
           <div
             key={stat.label}
-            className={`px-7 py-8 ${i < STATS.length - 1 ? "border-b md:border-b-0 md:border-r border-zinc-800" : ""} ${i % 2 === 1 && i < 4 ? "border-l md:border-l-0 border-zinc-800" : ""}`}
+            className="px-8 py-10 relative group"
+            style={{
+              borderRight: i < STATS.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none",
+              borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none",
+              background: "transparent",
+              transition: "background 0.4s ease",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLDivElement).style.background = "rgba(139,26,26,0.03)";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLDivElement).style.background = "transparent";
+            }}
           >
-            <div className="font-mono font-black text-white" style={{ fontSize: "clamp(28px, 3.5vw, 44px)", letterSpacing: "-0.02em" }}>
+            {/* Accent line top */}
+            {stat.accent && (
+              <div
+                className="absolute top-0 left-0 right-0 h-px"
+                style={{ background: "linear-gradient(90deg, transparent, rgba(139,26,26,0.5), transparent)" }}
+              />
+            )}
+
+            <div
+              className="font-mono font-black"
+              style={{
+                fontSize: "clamp(28px, 3.5vw, 44px)",
+                letterSpacing: "-0.02em",
+                color: stat.accent ? "#8b1a1a" : "#d4c9b8",
+                textShadow: stat.accent ? "0 0 20px rgba(139,26,26,0.3)" : "none",
+              }}
+            >
               <AnimatedNumber target={stat.value} suffix={stat.suffix} />
             </div>
-            <p className="font-mono text-[10px] text-zinc-700 mt-1.5 uppercase tracking-widest leading-tight">
+            <p
+              className="font-mono text-[10px] mt-2 uppercase tracking-widest leading-tight"
+              style={{ color: "#3a3530" }}
+            >
               {stat.label}
             </p>
           </div>

@@ -1,4 +1,4 @@
-# Arkham — Plataforma SaaS de Automatizaciones con IA
+# Arkhram — Plataforma SaaS de Automatizaciones con IA
 
 Describí en lenguaje natural qué querés automatizar. La IA detecta qué falta, lo pregunta de a uno, y genera la automatización lista para correr en n8n.
 

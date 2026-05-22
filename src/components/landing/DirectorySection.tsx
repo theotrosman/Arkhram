@@ -1,91 +1,166 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+
 const DIRS = [
   {
-    path: "inmobiliarias/",
-    entries: ["leads.wf", "visitas.wf", "contratos.wf", "seguimiento.wf"],
-    active: 8,
-  },
-  {
-    path: "salud/",
-    entries: ["turnos.wf", "recordatorio-48h.wf", "alta-paciente.wf", "cancelacion.wf"],
-    active: 14,
-  },
-  {
-    path: "contabilidad/",
-    entries: ["vencimientos.wf", "documentos.wf", "reportes.wf"],
-    active: 5,
+    path: "intelligence/",
+    entries: ["web-scraping.wf", "news-monitor.wf", "research-agent.wf", "pdf-report.wf"],
+    active: 12,
+    color: "#8b1a1a",
   },
   {
     path: "ecommerce/",
-    entries: ["nueva-venta.wf", "stock-bajo.wf", "post-venta.wf", "devolucion.wf"],
+    entries: ["new-sale.wf", "low-stock.wf", "post-sale.wf", "refund-handler.wf"],
     active: 31,
+    color: "#8b1a1a",
   },
   {
-    path: "agencias/",
-    entries: ["onboarding.wf", "aprobacion-contenido.wf", "reporte-semanal.wf"],
+    path: "healthcare/",
+    entries: ["appointments.wf", "reminder-48h.wf", "patient-intake.wf", "cancellation.wf"],
+    active: 14,
+    color: "#8b1a1a",
+  },
+  {
+    path: "finance/",
+    entries: ["invoice-processor.wf", "expense-tracker.wf", "reports.wf"],
+    active: 8,
+    color: "#8b1a1a",
+  },
+  {
+    path: "agencies/",
+    entries: ["client-onboarding.wf", "content-approval.wf", "weekly-report.wf"],
     active: 7,
+    color: "#8b1a1a",
   },
   {
-    path: "rrhh/",
-    entries: ["ingreso.wf", "vacaciones.wf", "cv-procesado.wf"],
+    path: "hr/",
+    entries: ["onboarding.wf", "leave-request.wf", "cv-processor.wf"],
     active: 4,
+    color: "#8b1a1a",
   },
   {
     path: "custom/",
-    entries: ["webhook.wf", "schedule.wf", "[cualquier_trigger].wf"],
+    entries: ["webhook.wf", "schedule.wf", "[any_trigger].wf"],
     active: 0,
+    color: "#3a3530",
   },
 ];
 
 export function DirectorySection() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) setVisible(true); },
+      { threshold: 0.1 }
+    );
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
   return (
-    <section className="border-b border-zinc-800">
-      <div className="grid grid-cols-1 lg:grid-cols-[280px_1fr]">
+    <section
+      ref={ref}
+      style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-[300px_1fr]">
 
         {/* Left label */}
-        <div className="border-b lg:border-b-0 lg:border-r border-zinc-800 p-8 lg:p-14 bg-[#040404] flex flex-col gap-4">
-          <div className="font-mono text-[10px] text-zinc-700 uppercase tracking-widest">
-            / rubros
+        <div
+          className="p-10 lg:p-14 flex flex-col gap-5"
+          style={{
+            borderRight: "1px solid rgba(255,255,255,0.04)",
+            borderBottom: "1px solid rgba(255,255,255,0.04)",
+            background: "rgba(3,2,2,0.5)",
+          }}
+        >
+          <p className="font-mono text-[10px] tracking-[0.3em] uppercase" style={{ color: "#8b1a1a" }}>
+            / DOMAINS
+          </p>
+          <p
+            style={{
+              fontFamily: "'Cinzel', serif",
+              fontSize: "clamp(18px, 2vw, 24px)",
+              color: "#d4c9b8",
+              letterSpacing: "0.05em",
+              lineHeight: 1.3,
+            }}
+          >
+            Every industry.<br />Every process.
+          </p>
+          <p className="font-mono text-[11px] leading-relaxed" style={{ color: "#3a3530" }}>
+            If there are repetitive processes, there is a flow that replaces them.
+            ARKHRAM knows the patterns and compiles them.
+          </p>
+          <div className="mt-4 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.03)" }}>
+            <p className="font-mono text-[9px]" style={{ color: "#2a2520" }}>
+              76 active flows across all domains
+            </p>
           </div>
-          <p className="font-mono text-sm text-zinc-400 leading-relaxed">
-            Si hay procesos repetitivos, hay un flujo que los reemplaza.
-          </p>
-          <p className="font-mono text-[10px] text-zinc-700 mt-4 leading-relaxed">
-            Cada rubro tiene patrones. Arkhram los conoce y los compila.
-          </p>
         </div>
 
         {/* Directory listing */}
-        <div className="p-6 lg:p-10 bg-[#030303]">
-          {/* Header */}
-          <div className="font-mono text-[10px] text-zinc-700 mb-4 uppercase tracking-widest">
-            /automaciones/
+        <div
+          className="p-8 lg:p-10"
+          style={{ background: "#020202" }}
+        >
+          <div className="font-mono text-[10px] mb-5 tracking-widest uppercase" style={{ color: "#2a2520" }}>
+            /automations/
           </div>
 
-          <div className="space-y-0">
+          <div>
             {DIRS.map((dir, di) => (
-              <div key={dir.path} className="group">
+              <div
+                key={dir.path}
+                className="section-reveal"
+                style={{
+                  opacity: visible ? 1 : 0,
+                  transform: visible ? "translateY(0)" : "translateY(10px)",
+                  transition: `opacity 0.5s ease ${di * 0.08}s, transform 0.5s ease ${di * 0.08}s`,
+                }}
+              >
                 {/* Directory row */}
-                <div className="flex items-center gap-3 font-mono text-[12px] py-2 border-b border-zinc-900/60">
-                  <span className="text-zinc-700">
+                <div
+                  className="flex items-center gap-3 font-mono text-[12px] py-2.5 group"
+                  style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}
+                >
+                  <span style={{ color: "#2a2520" }}>
                     {di < DIRS.length - 1 ? "├──" : "└──"}
                   </span>
-                  <span className="text-violet-400">{dir.path}</span>
-                  {dir.active > 0 && (
-                    <span className="ml-auto text-[10px] text-green-700 flex items-center gap-1">
-                      <span className="w-1 h-1 rounded-full bg-green-600" />
+                  <span
+                    className="transition-colors duration-200"
+                    style={{ color: dir.active > 0 ? "#8b1a1a" : "#3a3530" }}
+                  >
+                    {dir.path}
+                  </span>
+                  {dir.active > 0 ? (
+                    <span className="ml-auto font-mono text-[9px] flex items-center gap-1.5" style={{ color: "#4a3030" }}>
+                      <span
+                        className="w-1 h-1 rounded-full animate-pulse"
+                        style={{ background: "#8b1a1a" }}
+                      />
                       {dir.active} active
                     </span>
-                  )}
-                  {dir.active === 0 && (
-                    <span className="ml-auto text-[10px] text-zinc-700">configurable</span>
+                  ) : (
+                    <span className="ml-auto font-mono text-[9px]" style={{ color: "#2a2520" }}>
+                      configurable
+                    </span>
                   )}
                 </div>
 
                 {/* Files */}
-                <div className="ml-6 space-y-0">
+                <div className="ml-6">
                   {dir.entries.map((entry, ei) => (
-                    <div key={entry} className="flex items-center gap-3 font-mono text-[11px] py-1.5 text-zinc-600 hover:text-zinc-400 transition-colors">
-                      <span className="text-zinc-800">
+                    <div
+                      key={entry}
+                      className="flex items-center gap-3 font-mono text-[11px] py-1.5 transition-colors duration-200"
+                      style={{ color: "#2a2520" }}
+                      onMouseEnter={(e) => (e.currentTarget.style.color = "#5a5050")}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = "#2a2520")}
+                    >
+                      <span style={{ color: "#1a1a1a" }}>
                         {ei < dir.entries.length - 1 ? "  ├─" : "  └─"}
                       </span>
                       <span>{entry}</span>

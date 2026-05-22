@@ -3,28 +3,28 @@
 import { useEffect, useRef, useState } from "react";
 
 const LINES = [
-  { delay: 0,     type: "prompt",  text: "arkhram --new" },
-  { delay: 500,   type: "system",  text: "sesión iniciada. describí tu automatización." },
+  { delay: 0,     type: "prompt",  text: "arkhram --new-session" },
+  { delay: 500,   type: "system",  text: "// Session initialized. Describe your automation." },
   { delay: 1100,  type: "blank",   text: "" },
-  { delay: 1200,  type: "user",    text: "cuando shopify registra una venta nueva quiero aviso por whatsapp al equipo" },
-  { delay: 2600,  type: "ai",      text: "¿Qué tienda de Shopify?" },
-  { delay: 3400,  type: "user",    text: "mitienda.myshopify.com" },
-  { delay: 4300,  type: "ai",      text: "¿A qué número de WhatsApp va el aviso?" },
-  { delay: 5000,  type: "user",    text: "+5491187654321" },
-  { delay: 5900,  type: "ai",      text: "¿Incluir monto y producto en el mensaje?" },
-  { delay: 6600,  type: "user",    text: "sí, con el total" },
-  { delay: 7400,  type: "blank",   text: "" },
-  { delay: 7600,  type: "schema",  text: "trigger:  shopify.orders [mitienda.myshopify.com]" },
-  { delay: 7900,  type: "schema",  text: "action:   whatsapp.send → +5491187654321" },
-  { delay: 8200,  type: "schema",  text: "msg:      \"Venta #{id}: {producto} — ${total}\"" },
-  { delay: 8700,  type: "blank",   text: "" },
-  { delay: 8900,  type: "confirm", text: "¿Activamos?" },
-  { delay: 9800,  type: "user",    text: "sí" },
-  { delay: 10500, type: "blank",   text: "" },
-  { delay: 10700, type: "deploy",  text: "[    ] compilando flujo" },
-  { delay: 11200, type: "deploy",  text: "[██  ] conectando shopify" },
-  { delay: 11700, type: "deploy",  text: "[████] conectando whatsapp" },
-  { delay: 12200, type: "done",    text: "✓  FLW-2910 activo — listo para la primera venta" },
+  { delay: 1300,  type: "user",    text: "when shopify registers a new sale, notify the team on whatsapp with order details" },
+  { delay: 2700,  type: "ai",      text: "→ Which Shopify store?" },
+  { delay: 3500,  type: "user",    text: "mitienda.myshopify.com" },
+  { delay: 4400,  type: "ai",      text: "→ WhatsApp number for notifications?" },
+  { delay: 5100,  type: "user",    text: "+5491187654321" },
+  { delay: 6000,  type: "ai",      text: "→ Include order amount and product name?" },
+  { delay: 6700,  type: "user",    text: "yes, with total and customer name" },
+  { delay: 7500,  type: "blank",   text: "" },
+  { delay: 7700,  type: "schema",  text: "TRIGGER:  shopify.orders [mitienda.myshopify.com]" },
+  { delay: 8000,  type: "schema",  text: "ACTION:   whatsapp.send → +5491187654321" },
+  { delay: 8300,  type: "schema",  text: "MESSAGE:  \"Order #{id}: {product} — ${total} · {customer}\"" },
+  { delay: 8800,  type: "blank",   text: "" },
+  { delay: 9000,  type: "confirm", text: "→ Ready to deploy. Activate?" },
+  { delay: 9900,  type: "user",    text: "yes" },
+  { delay: 10600, type: "blank",   text: "" },
+  { delay: 10800, type: "deploy",  text: "[          ] compiling flow..." },
+  { delay: 11300, type: "deploy",  text: "[████      ] connecting shopify webhook" },
+  { delay: 11800, type: "deploy",  text: "[████████  ] authenticating whatsapp" },
+  { delay: 12300, type: "done",    text: "✓  FLW-2910 ACTIVE — awaiting first sale" },
 ];
 
 export function TerminalDemo() {
@@ -42,23 +42,23 @@ export function TerminalDemo() {
           });
         }
       },
-      { threshold: 0.25 }
+      { threshold: 0.2 }
     );
     if (ref.current) obs.observe(ref.current);
     return () => obs.disconnect();
   }, []);
 
-  function lineClass(type: string) {
+  function lineStyle(type: string): React.CSSProperties {
     switch (type) {
-      case "prompt":  return "text-violet-400";
-      case "system":  return "text-zinc-600 italic";
-      case "user":    return "text-zinc-200";
-      case "ai":      return "text-zinc-400";
-      case "schema":  return "text-amber-500/80";
-      case "confirm": return "text-zinc-300";
-      case "deploy":  return "text-zinc-600";
-      case "done":    return "text-green-400 font-medium";
-      default:        return "";
+      case "prompt":  return { color: "#8b1a1a" };
+      case "system":  return { color: "#2a2520", fontStyle: "italic" };
+      case "user":    return { color: "#8a8070" };
+      case "ai":      return { color: "#5a5550" };
+      case "schema":  return { color: "#6a5a40" };
+      case "confirm": return { color: "#6a6060" };
+      case "deploy":  return { color: "#3a3530" };
+      case "done":    return { color: "#4a8a3a", fontWeight: "bold" };
+      default:        return {};
     }
   }
 
@@ -66,9 +66,9 @@ export function TerminalDemo() {
     switch (type) {
       case "prompt":  return "❯ ";
       case "user":    return "  $ ";
-      case "ai":      return "  → ";
+      case "ai":      return "  ";
       case "schema":  return "    ";
-      case "confirm": return "  → ";
+      case "confirm": return "  ";
       case "deploy":  return "    ";
       case "done":    return "    ";
       default:        return "";
@@ -76,59 +76,108 @@ export function TerminalDemo() {
   }
 
   return (
-    <section id="demo" className="border-b border-zinc-800">
-      <div className="grid grid-cols-1 lg:grid-cols-[240px_1fr]">
+    <section
+      id="demo"
+      style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+    >
+      <div className="grid grid-cols-1 lg:grid-cols-[260px_1fr]">
 
         {/* Label column */}
-        <div className="border-b lg:border-b-0 lg:border-r border-zinc-800 p-8 lg:p-12 bg-[#040404] flex flex-col gap-8">
-          <p className="font-mono text-[10px] text-zinc-700 uppercase tracking-widest">/ demo</p>
+        <div
+          className="p-10 lg:p-12 flex flex-col gap-8"
+          style={{
+            borderRight: "1px solid rgba(255,255,255,0.04)",
+            borderBottom: "1px solid rgba(255,255,255,0.04)",
+            background: "rgba(3,2,2,0.6)",
+          }}
+        >
+          <p className="font-mono text-[10px] tracking-[0.3em] uppercase" style={{ color: "#8b1a1a" }}>
+            / DEMO
+          </p>
 
-          <div className="space-y-6">
+          <div className="space-y-7">
             {[
-              ["01 / describís", "Sin tecnicismos. Sin formularios. En castellano."],
-              ["02 / arkhram pregunta", "Una cosa por vez. Directo al punto."],
-              ["03 / flujo en producción", "Generado y activado en segundos."],
+              ["01 / DESCRIBE", "Natural language. No forms. No builders."],
+              ["02 / ARKHRAM ASKS", "One question at a time. Precise."],
+              ["03 / DEPLOYED", "Flow compiled and live in seconds."],
             ].map(([title, desc]) => (
-              <div key={title} className="space-y-1">
-                <p className="font-mono text-[11px] text-zinc-400">{title}</p>
-                <p className="font-mono text-[10px] text-zinc-700 leading-relaxed">{desc}</p>
+              <div key={title} className="space-y-1.5">
+                <p
+                  style={{
+                    fontFamily: "'Cinzel', serif",
+                    fontSize: "11px",
+                    color: "#6a5a50",
+                    letterSpacing: "0.1em",
+                  }}
+                >
+                  {title}
+                </p>
+                <p className="font-mono text-[10px] leading-relaxed" style={{ color: "#2a2520" }}>
+                  {desc}
+                </p>
               </div>
             ))}
           </div>
 
-          <div className="mt-auto pt-4 border-t border-zinc-900">
-            <p className="font-mono text-[10px] text-zinc-800">tiempo real: ~12s</p>
-            <p className="font-mono text-[10px] text-zinc-800">sin código requerido</p>
+          <div className="mt-auto pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.03)" }}>
+            <p className="font-mono text-[9px]" style={{ color: "#1a1a1a" }}>real time: ~12s</p>
+            <p className="font-mono text-[9px]" style={{ color: "#1a1a1a" }}>zero code required</p>
           </div>
         </div>
 
         {/* Terminal */}
         <div ref={ref}>
-          <div className="border-b border-zinc-800 bg-[#060606] px-5 py-2.5 flex items-center gap-2">
+          {/* Terminal header */}
+          <div
+            className="flex items-center gap-2 px-5 py-3"
+            style={{
+              borderBottom: "1px solid rgba(139,26,26,0.1)",
+              background: "rgba(5,2,2,0.9)",
+            }}
+          >
             <div className="flex gap-1.5">
-              <div className="w-2 h-2 rounded-full bg-zinc-800" />
-              <div className="w-2 h-2 rounded-full bg-zinc-800" />
-              <div className="w-2 h-2 rounded-full bg-zinc-800" />
+              <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#3a1010" }} />
+              <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#2a1a0a" }} />
+              <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#1a2a0a" }} />
             </div>
-            <span className="ml-2 font-mono text-[10px] text-zinc-700">arkhram / nueva automatización</span>
-            <span className="ml-auto font-mono text-[10px] text-green-700 flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-600" />
-              live session
+            <span className="ml-3 font-mono text-[10px]" style={{ color: "#2a2020" }}>
+              arkhram / new automation session
             </span>
+            <div className="ml-auto flex items-center gap-1.5">
+              <div
+                className="w-1.5 h-1.5 rounded-full animate-pulse"
+                style={{ background: "#8b1a1a", boxShadow: "0 0 6px rgba(139,26,26,0.8)" }}
+              />
+              <span className="font-mono text-[9px]" style={{ color: "#8b1a1a" }}>live session</span>
+            </div>
           </div>
 
-          <div className="bg-[#030303] p-6 min-h-[400px] scanlines">
-            <div className="space-y-[3px]">
+          {/* Terminal body */}
+          <div
+            className="relative scanlines"
+            style={{
+              background: "#020202",
+              padding: "24px",
+              minHeight: "420px",
+            }}
+          >
+            <div className="space-y-1">
               {LINES.slice(0, visibleCount).map((line, i) => (
                 <div key={i}>
                   {line.type === "blank" ? (
-                    <div className="h-3" />
+                    <div style={{ height: "10px" }} />
                   ) : (
-                    <p className={`font-mono text-[12px] leading-relaxed ${lineClass(line.type)}`}>
-                      <span className="opacity-50">{linePrefix(line.type)}</span>
+                    <p
+                      className="font-mono text-[12px] leading-relaxed"
+                      style={lineStyle(line.type)}
+                    >
+                      <span style={{ opacity: 0.4 }}>{linePrefix(line.type)}</span>
                       {line.text}
                       {i === visibleCount - 1 && line.type !== "done" && line.type !== "blank" && (
-                        <span className="inline-block w-[8px] h-[12px] bg-current ml-0.5 cursor-blink align-middle opacity-70" />
+                        <span
+                          className="cursor-blink inline-block ml-0.5 align-middle"
+                          style={{ width: 7, height: 12, background: "currentColor", opacity: 0.7 }}
+                        />
                       )}
                     </p>
                   )}
