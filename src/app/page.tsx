@@ -5,7 +5,6 @@ import { ChatPreview } from "@/components/landing/ChatPreview";
 import { Features } from "@/components/landing/Features";
 import { Industries } from "@/components/landing/Industries";
 import Link from "next/link";
-import { Zap } from "lucide-react";
 
 export default function LandingPage() {
   return (
@@ -32,8 +31,8 @@ export default function LandingPage() {
 
           <div className="max-w-2xl mx-auto text-center space-y-6">
             <div className="flex justify-center">
-              <div className="w-12 h-12 rounded-2xl bg-violet-600 flex items-center justify-center shadow-[0_0_30px_rgba(124,58,237,0.4)]">
-                <Zap className="w-6 h-6 text-white" />
+              <div className="px-4 py-1.5 rounded-full border border-violet-500/40 bg-violet-500/10">
+                <span className="text-xs font-mono text-violet-400 tracking-widest uppercase">Arkhram</span>
               </div>
             </div>
             <h2 className="text-4xl sm:text-5xl font-bold text-white leading-tight">
@@ -57,10 +56,7 @@ export default function LandingPage() {
         {/* Footer */}
         <footer className="border-t border-zinc-900 px-6 py-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-600">
           <div className="flex items-center gap-2">
-            <div className="w-5 h-5 rounded-lg bg-violet-600 flex items-center justify-center">
-              <Zap className="w-3 h-3 text-white" />
-            </div>
-            <span className="font-semibold text-zinc-500 tracking-tight">Arkhram</span>
+            <span className="font-bold text-zinc-500 font-mono tracking-tight">Arkhram</span>
           </div>
           <p>© {new Date().getFullYear()} Arkhram. Automatizaciones inteligentes.</p>
           <div className="flex gap-4 text-zinc-700">

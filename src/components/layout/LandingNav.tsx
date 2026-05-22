@@ -1,24 +1,26 @@
 "use client";
 
 import Link from "next/link";
-import { Zap } from "lucide-react";
 import { useScramble } from "@/hooks/useScramble";
 import { useState, useEffect } from "react";
 
 export function LandingNav() {
   const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const [scrolled, setScrolled] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+    const onScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", onScroll);
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
   const name = useScramble("Arkhram", { delay: 0, speed: 60, trigger: mounted });
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 border-b border-zinc-900/80 bg-zinc-950/80 backdrop-blur-md">
-      <Link href="/" className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-md bg-violet-600 flex items-center justify-center">
-          <Zap className="w-3.5 h-3.5 text-white" />
-        </div>
-        <span className="text-sm font-bold text-white font-mono tracking-tight">
-          {mounted ? name : "Arkhram"}
-        </span>
+    <nav className={`fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-6 py-4 transition-all duration-300 ${
+      scrolled ? "border-b border-zinc-900/80 bg-[#050505]/90 backdrop-blur-md" : "bg-transparent"
+    }`}>
+      <Link href="/" className="text-sm font-bold text-white tracking-tight font-mono">
+        {mounted ? name : "Arkhram"}
       </Link>
 
       <div className="flex items-center gap-4">
@@ -27,7 +29,7 @@ export function LandingNav() {
         </Link>
         <Link
           href="/login"
-          className="px-4 py-2 rounded-full border border-zinc-700 hover:border-violet-500/60 hover:bg-violet-500/10 text-zinc-300 hover:text-white text-xs font-medium transition-all duration-200"
+          className="px-4 py-2 rounded-full border border-zinc-800 hover:border-violet-500/50 hover:bg-violet-500/10 text-zinc-400 hover:text-white text-xs font-medium transition-all duration-200"
         >
           Entrar
         </Link>

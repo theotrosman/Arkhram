@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { groq, GROQ_MODEL, SYSTEM_PROMPT } from "@/lib/groq";
+import { groq, GROQ_MODEL, buildSystemPrompt } from "@/lib/groq";
 import { ChatMessage } from "@/lib/types";
 import { z } from "zod";
 
@@ -10,17 +10,26 @@ const requestSchema = z.object({
       content: z.string(),
     })
   ),
+  userProfile: z.object({
+    name: z.string().nullable().optional(),
+    business_type: z.string().nullable().optional(),
+    business_description: z.string().nullable().optional(),
+    industry: z.string().nullable().optional(),
+    ai_notes: z.string().nullable().optional(),
+  }).optional().nullable(),
 });
 
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
-    const { messages } = requestSchema.parse(body);
+    const { messages, userProfile } = requestSchema.parse(body);
+
+    const systemPrompt = buildSystemPrompt(userProfile ?? null);
 
     const completion = await groq.chat.completions.create({
       model: GROQ_MODEL,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
+        { role: "system", content: systemPrompt },
         ...messages.map((m: ChatMessage) => ({
           role: m.role,
           content: m.content,
@@ -39,11 +48,15 @@ export async function POST(req: NextRequest) {
       try {
         automationConfig = JSON.parse(jsonMatch[1]);
       } catch {
-        // JSON parse failed — continue without config
+        // continue without config
       }
     }
 
-    return NextResponse.json({ content, automationConfig });
+    // Extract AI notes to save to profile (simple heuristic: look for [NOTA:] tags)
+    const noteMatch = content.match(/\[NOTA:(.*?)\]/s);
+    const profileNote = noteMatch ? noteMatch[1].trim() : null;
+
+    return NextResponse.json({ content: content.replace(/\[NOTA:.*?\]/gs, "").trim(), automationConfig, profileNote });
   } catch (error) {
     console.error("Chat API error:", error);
     return NextResponse.json(
