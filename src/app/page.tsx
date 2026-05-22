@@ -4,6 +4,7 @@ import { IntroSection } from "@/components/org/IntroSection";
 import { OrgReveal } from "@/components/org/OrgReveal";
 import { EntitiesSection } from "@/components/org/EntitiesSection";
 import { ArchivesSection } from "@/components/org/ArchivesSection";
+import { ContactSection } from "@/components/org/ContactSection";
 import { OrgArchitecture } from "@/components/org/OrgArchitecture";
 import { OrgOutro } from "@/components/org/OrgOutro";
 
@@ -24,6 +25,7 @@ export default function Home() {
       <OrgReveal />
       <EntitiesSection />
       <ArchivesSection />
+      <ContactSection />
       <OrgArchitecture />
       <OrgOutro />
     </main>

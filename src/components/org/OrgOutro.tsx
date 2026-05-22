@@ -164,13 +164,6 @@ export function OrgOutro() {
           >
             ⟶ &nbsp; GITHUB ORGANIZATION
           </a>
-          <a
-            href="/login"
-            className="btn-ghost"
-            style={{ padding: "0.7rem 1.8rem", fontSize: "0.62rem", textDecoration: "none", display: "inline-block" }}
-          >
-            ⟶ &nbsp; ENTER SYSTEM
-          </a>
         </motion.div>
 
         {/* Final credits */}

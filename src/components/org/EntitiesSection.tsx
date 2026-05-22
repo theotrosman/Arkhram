@@ -1,44 +1,47 @@
 "use client";
-import { motion, useInView } from "framer-motion";
+import { motion, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, useState } from "react";
 import Image from "next/image";
 
 type Entity = {
   id: string;
   username: string;
-  codename: string;
+  handle: string;
   role: string;
+  faction: string;
+  cipher: string;
   bio: string;
   quote: string;
-  tags: string[];
-  side: "left" | "right";
+  skills: string[];
   projects: { name: string; href: string }[];
 };
 
 const ENTITIES: Entity[] = [
   {
-    id: "01",
+    id: "ENTITY_01",
     username: "sebacalvino",
-    codename: "CALVIÑO",
-    role: "Systems Architect / AI Engineer",
-    bio: "Constructs intelligence from the ground up. Product thinking forged in clean architecture. Where others iterate, he designs the invariants.",
+    handle: "CALVIÑO",
+    role: "Systems Architect",
+    faction: "AI / Infrastructure",
+    cipher: "SBC-4107",
+    bio: "Constructs intelligence where others only see complexity. Full-stack by necessity, systems thinker by nature. Builds what the problem demands — nothing more.",
     quote: "Curiosity over comfort. Iteration over perfection.",
-    tags: ["AI Systems", "Full-Stack", "Automation", "Python", "C#", "React"],
-    side: "left",
+    skills: ["AI Systems", "Python", "C#", "React", "n8n", "Automation"],
     projects: [
       { name: "ESCAPE-C137", href: "https://github.com/Arkhram-Organization/ESCAPE-C137" },
       { name: "Tektra", href: "https://github.com/SebaCalvino/Tektra" },
     ],
   },
   {
-    id: "02",
+    id: "ENTITY_02",
     username: "theotrosman",
-    codename: "TROSMAN",
-    role: "Backend Architect / Systems Thinker",
-    bio: "Every system reveals its truth in its lowest layer. Backend-first. Scalable by design. The architect behind the architecture.",
+    handle: "TROSMAN",
+    role: "Backend Architect",
+    faction: "Systems / Infrastructure",
+    cipher: "THT-0293",
+    bio: "Backend-first. Every layer has a truth — he finds it at the lowest one. Designs systems that outlast the problem that required them.",
     quote: "Every system reveals its truth in its lowest layer.",
-    tags: ["Backend", "C# / .NET", "Next.js", "TypeScript", "APIs", "Supabase"],
-    side: "right",
+    skills: ["C# / .NET", "Next.js", "TypeScript", "Supabase", "REST", "Vercel"],
     projects: [
       { name: "PROMPTOOL", href: "https://github.com/theotrosman/PROMPTOOL" },
       { name: "Automatis", href: "https://github.com/Arkhram-Organization/Automatis" },
@@ -46,395 +49,198 @@ const ENTITIES: Entity[] = [
   },
 ];
 
-function EntityCard({ entity, index }: { entity: Entity; index: number }) {
+function EntityReveal({ entity, index }: { entity: Entity; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: false, margin: "-15% 0px" });
+  const isInView = useInView(ref, { once: false, margin: "-12% 0px" });
   const [hovered, setHovered] = useState(false);
 
-  const fromLeft = entity.side === "left";
+  const fromDir = index === 0 ? -100 : 100;
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, x: fromLeft ? -80 : 80, filter: "blur(12px)" }}
-      animate={
-        isInView
-          ? { opacity: 1, x: 0, filter: "blur(0px)" }
-          : { opacity: 0, x: fromLeft ? -80 : 80, filter: "blur(12px)" }
-      }
-      transition={{ duration: 1.2, delay: index * 0.2, ease: [0.16, 1, 0.3, 1] }}
+      initial={{ opacity: 0, x: fromDir, filter: "blur(16px)" }}
+      animate={isInView ? { opacity: 1, x: 0, filter: "blur(0px)" } : { opacity: 0, x: fromDir, filter: "blur(16px)" }}
+      transition={{ duration: 1.4, ease: [0.16, 1, 0.3, 1] }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      style={{
-        position: "relative",
-        padding: "2px",
-        borderRadius: "2px",
-        background: hovered
-          ? "linear-gradient(135deg, rgba(139,26,26,0.4), rgba(60,20,10,0.2), rgba(192,160,96,0.15))"
-          : "linear-gradient(135deg, rgba(139,26,26,0.12), transparent)",
-        cursor: "default",
-        transition: "background 0.5s ease",
-      }}
+      style={{ position: "relative" }}
     >
-      <div
+      {/* Outer glow border */}
+      <motion.div
+        animate={{
+          boxShadow: hovered
+            ? "0 0 60px rgba(139,26,26,0.18), inset 0 0 60px rgba(139,26,26,0.04)"
+            : "0 0 0px rgba(139,26,26,0)",
+          borderColor: hovered ? "rgba(139,26,26,0.3)" : "rgba(255,255,255,0.04)",
+        }}
+        transition={{ duration: 0.5 }}
         style={{
-          background: "linear-gradient(145deg, #080808 0%, #050505 60%, #0a0505 100%)",
+          border: "1px solid rgba(255,255,255,0.04)",
+          background: "linear-gradient(160deg, #0a0606 0%, #060404 60%, #0d0707 100%)",
           padding: "2.5rem",
           position: "relative",
           overflow: "hidden",
         }}
       >
-        {/* Background fog on hover */}
+        {/* Scan line sweep on hover */}
         <motion.div
-          animate={{ opacity: hovered ? 1 : 0 }}
-          transition={{ duration: 0.5 }}
+          animate={{ y: hovered ? "200%" : "-100%", opacity: hovered ? [0, 0.06, 0] : 0 }}
+          transition={{ duration: 1.2, ease: "easeInOut" }}
           style={{
             position: "absolute",
-            inset: 0,
-            background: "radial-gradient(ellipse at 30% 50%, rgba(139,26,26,0.06) 0%, transparent 70%)",
+            left: 0,
+            right: 0,
+            height: "40%",
+            background: "linear-gradient(180deg, transparent, rgba(139,26,26,0.08), transparent)",
             pointerEvents: "none",
+            zIndex: 0,
           }}
         />
 
-        {/* Entity ID */}
-        <div
-          style={{
-            fontFamily: "monospace",
-            fontSize: "0.6rem",
-            letterSpacing: "0.4em",
-            color: "rgba(139,26,26,0.5)",
-            marginBottom: "1.5rem",
-          }}
-        >
-          ENTIDAD_{entity.id} / ARKHRAM_ROSTER
+        {/* Entity ID header */}
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.8rem", position: "relative", zIndex: 1 }}>
+          <span style={{ fontFamily: "monospace", fontSize: "0.55rem", letterSpacing: "0.4em", color: "rgba(139,26,26,0.5)", textTransform: "uppercase" }}>
+            {entity.id} / ARKHRAM
+          </span>
+          <span style={{ fontFamily: "monospace", fontSize: "0.5rem", letterSpacing: "0.2em", color: "rgba(212,201,184,0.2)" }}>
+            CIPHER: {entity.cipher}
+          </span>
         </div>
 
-        {/* Avatar + title row */}
-        <div style={{ display: "flex", alignItems: "flex-start", gap: "1.5rem", marginBottom: "1.5rem" }}>
-          {/* Avatar */}
+        {/* Avatar + identity */}
+        <div style={{ display: "flex", gap: "1.5rem", alignItems: "flex-start", marginBottom: "1.8rem", position: "relative", zIndex: 1 }}>
           <div style={{ position: "relative", flexShrink: 0 }}>
+            {/* Avatar with blood glow */}
             <motion.div
-              animate={{
-                boxShadow: hovered
-                  ? "0 0 30px rgba(139,26,26,0.4), 0 0 60px rgba(139,26,26,0.1)"
-                  : "0 0 10px rgba(139,26,26,0.15)",
-              }}
+              animate={{ filter: hovered ? "grayscale(0%) contrast(1.1)" : "grayscale(40%) contrast(1.05)" }}
               transition={{ duration: 0.5 }}
               style={{
-                width: 80,
-                height: 80,
-                borderRadius: "2px",
+                width: 76,
+                height: 76,
+                border: "1px solid rgba(139,26,26,0.25)",
                 overflow: "hidden",
-                border: "1px solid rgba(139,26,26,0.2)",
                 position: "relative",
               }}
             >
               <Image
                 src={`https://github.com/${entity.username}.png?size=200`}
-                alt={entity.codename}
-                width={80}
-                height={80}
-                style={{ objectFit: "cover", filter: "grayscale(30%) contrast(1.1)" }}
+                alt={entity.handle}
+                width={76}
+                height={76}
+                style={{ objectFit: "cover", display: "block" }}
                 unoptimized
               />
-              {/* Scanline over avatar */}
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  backgroundImage:
-                    "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.12) 3px, rgba(0,0,0,0.12) 4px)",
-                  pointerEvents: "none",
-                }}
-              />
+              {/* CRT scanlines on avatar */}
+              <div style={{ position: "absolute", inset: 0, backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.15) 3px, rgba(0,0,0,0.15) 4px)", pointerEvents: "none" }} />
             </motion.div>
-            {/* Status indicator */}
-            <div
-              style={{
-                position: "absolute",
-                bottom: -4,
-                right: -4,
-                width: 10,
-                height: 10,
-                borderRadius: "50%",
-                background: "#8b1a1a",
-                border: "1px solid #050505",
-                animation: "pulse-blood 2s ease-in-out infinite",
-              }}
+            {/* Pulse dot */}
+            <motion.div
+              animate={{ scale: [1, 1.5, 1], opacity: [1, 0.4, 1] }}
+              transition={{ duration: 2, repeat: Infinity }}
+              style={{ position: "absolute", bottom: -4, right: -4, width: 8, height: 8, borderRadius: "50%", background: "#8b1a1a", border: "1.5px solid #050505" }}
             />
           </div>
 
-          {/* Name block */}
           <div>
-            <div
-              style={{
-                fontFamily: "'Cinzel', serif",
-                fontSize: "clamp(1.4rem, 3vw, 2rem)",
-                fontWeight: 700,
-                letterSpacing: "0.15em",
-                color: "#e8e0d5",
-                lineHeight: 1,
-                marginBottom: "0.4rem",
-              }}
-            >
-              {entity.codename}
+            <div style={{ fontFamily: "'Cinzel', serif", fontSize: "clamp(1.3rem, 2.5vw, 1.8rem)", fontWeight: 700, letterSpacing: "0.12em", color: "#e0d8cc", lineHeight: 1, marginBottom: "0.35rem" }}>
+              {entity.handle}
             </div>
-            <div
-              style={{
-                fontFamily: "monospace",
-                fontSize: "0.65rem",
-                letterSpacing: "0.08em",
-                color: "rgba(192,160,96,0.6)",
-              }}
-            >
+            <div style={{ fontFamily: "monospace", fontSize: "0.6rem", letterSpacing: "0.08em", color: "rgba(192,160,96,0.55)", marginBottom: "0.2rem" }}>
               {entity.role}
             </div>
-            <div
-              style={{
-                fontFamily: "monospace",
-                fontSize: "0.55rem",
-                letterSpacing: "0.1em",
-                color: "rgba(139,26,26,0.5)",
-                marginTop: "0.2rem",
-              }}
-            >
-              @{entity.username}
+            <div style={{ fontFamily: "monospace", fontSize: "0.52rem", letterSpacing: "0.08em", color: "rgba(139,26,26,0.45)" }}>
+              {entity.faction}
             </div>
           </div>
         </div>
 
         {/* Divider */}
-        <div
-          style={{
-            height: "1px",
-            background:
-              "linear-gradient(90deg, rgba(139,26,26,0.4), rgba(192,160,96,0.2), transparent)",
-            marginBottom: "1.5rem",
-          }}
-        />
+        <div style={{ height: "1px", background: "linear-gradient(90deg, rgba(139,26,26,0.35), rgba(192,160,96,0.15), transparent)", marginBottom: "1.5rem", position: "relative", zIndex: 1 }} />
 
         {/* Bio */}
-        <p
-          style={{
-            fontFamily: "monospace",
-            fontSize: "0.72rem",
-            lineHeight: 1.9,
-            color: "rgba(212,201,184,0.55)",
-            marginBottom: "1.5rem",
-            letterSpacing: "0.02em",
-          }}
-        >
+        <p style={{ fontFamily: "monospace", fontSize: "0.68rem", lineHeight: 1.95, color: "rgba(212,201,184,0.5)", marginBottom: "1.2rem", letterSpacing: "0.02em", position: "relative", zIndex: 1 }}>
           {entity.bio}
         </p>
 
         {/* Quote */}
-        <div
-          style={{
-            borderLeft: "2px solid rgba(139,26,26,0.4)",
-            paddingLeft: "1rem",
-            marginBottom: "1.5rem",
-          }}
+        <motion.div
+          animate={{ borderLeftColor: hovered ? "rgba(139,26,26,0.6)" : "rgba(139,26,26,0.25)" }}
+          transition={{ duration: 0.4 }}
+          style={{ borderLeft: "1.5px solid rgba(139,26,26,0.25)", paddingLeft: "0.9rem", marginBottom: "1.5rem", position: "relative", zIndex: 1 }}
         >
-          <p
-            style={{
-              fontFamily: "'Cinzel', serif",
-              fontSize: "0.72rem",
-              fontStyle: "italic",
-              color: "rgba(212,201,184,0.35)",
-              letterSpacing: "0.04em",
-              lineHeight: 1.7,
-            }}
-          >
+          <p style={{ fontFamily: "'Cinzel', serif", fontSize: "0.68rem", fontStyle: "italic", color: "rgba(212,201,184,0.3)", letterSpacing: "0.04em", lineHeight: 1.75 }}>
             &ldquo;{entity.quote}&rdquo;
           </p>
-        </div>
+        </motion.div>
 
-        {/* Tags */}
-        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.4rem", marginBottom: "1.5rem" }}>
-          {entity.tags.map((tag) => (
-            <span
-              key={tag}
-              style={{
-                fontFamily: "monospace",
-                fontSize: "0.55rem",
-                letterSpacing: "0.1em",
-                color: "rgba(139,26,26,0.7)",
-                border: "1px solid rgba(139,26,26,0.2)",
-                padding: "0.2rem 0.5rem",
-                textTransform: "uppercase",
-              }}
-            >
-              {tag}
+        {/* Skills */}
+        <div style={{ display: "flex", flexWrap: "wrap", gap: "0.3rem", marginBottom: "1.5rem", position: "relative", zIndex: 1 }}>
+          {entity.skills.map((s) => (
+            <span key={s} style={{ fontFamily: "monospace", fontSize: "0.5rem", letterSpacing: "0.1em", color: "rgba(139,26,26,0.65)", border: "1px solid rgba(139,26,26,0.18)", padding: "0.15rem 0.45rem", textTransform: "uppercase" }}>
+              {s}
             </span>
           ))}
         </div>
 
-        {/* Projects */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "0.3rem" }}>
-          <div
-            style={{
-              fontFamily: "monospace",
-              fontSize: "0.55rem",
-              letterSpacing: "0.3em",
-              color: "rgba(212,201,184,0.2)",
-              marginBottom: "0.3rem",
-              textTransform: "uppercase",
-            }}
-          >
-            / linked archives
-          </div>
+        {/* Linked artifacts */}
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div style={{ fontFamily: "monospace", fontSize: "0.48rem", letterSpacing: "0.35em", color: "rgba(212,201,184,0.18)", marginBottom: "0.4rem", textTransform: "uppercase" }}>/ artifacts</div>
           {entity.projects.map((p) => (
-            <a
-              key={p.name}
-              href={p.href}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                fontFamily: "monospace",
-                fontSize: "0.65rem",
-                letterSpacing: "0.05em",
-                color: "rgba(192,160,96,0.5)",
-                textDecoration: "none",
-                display: "flex",
-                alignItems: "center",
-                gap: "0.5rem",
-                transition: "color 0.2s ease",
-              }}
-              onMouseEnter={(e) =>
-                ((e.currentTarget as HTMLElement).style.color = "rgba(192,160,96,0.9)")
-              }
-              onMouseLeave={(e) =>
-                ((e.currentTarget as HTMLElement).style.color = "rgba(192,160,96,0.5)")
-              }
+            <a key={p.name} href={p.href} target="_blank" rel="noopener noreferrer"
+              style={{ display: "flex", alignItems: "center", gap: "0.45rem", fontFamily: "monospace", fontSize: "0.6rem", color: "rgba(192,160,96,0.45)", textDecoration: "none", marginBottom: "0.25rem", transition: "color 0.2s ease" }}
+              onMouseEnter={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(192,160,96,0.85)")}
+              onMouseLeave={(e) => ((e.currentTarget as HTMLElement).style.color = "rgba(192,160,96,0.45)")}
             >
-              <span style={{ color: "rgba(139,26,26,0.6)" }}>→</span>
-              {p.name}
+              <span style={{ color: "rgba(139,26,26,0.5)" }}>→</span> {p.name}
             </a>
           ))}
         </div>
 
-        {/* Corner mark */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 16,
-            right: 16,
-            width: 16,
-            height: 16,
-            borderBottom: "1px solid rgba(139,26,26,0.25)",
-            borderRight: "1px solid rgba(139,26,26,0.25)",
-          }}
-        />
-      </div>
+        {/* Corner marks */}
+        <div style={{ position: "absolute", top: 12, right: 12, width: 12, height: 12, borderTop: "1px solid rgba(139,26,26,0.2)", borderRight: "1px solid rgba(139,26,26,0.2)" }} />
+        <div style={{ position: "absolute", bottom: 12, left: 12, width: 12, height: 12, borderBottom: "1px solid rgba(139,26,26,0.2)", borderLeft: "1px solid rgba(139,26,26,0.2)" }} />
+      </motion.div>
     </motion.div>
   );
 }
 
 export function EntitiesSection() {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: false, margin: "-10% 0px" });
+  const isInView = useInView(ref, { once: false, margin: "-8% 0px" });
+  const { scrollYProgress } = useScroll({ target: ref, offset: ["start end", "end start"] });
+  const bgY = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
 
   return (
-    <section
-      ref={ref}
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        padding: "8rem 2rem",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      {/* Background atmosphere */}
-      <div
-        className="animate-fog-slow"
-        style={{
-          position: "absolute",
-          inset: "-20%",
-          background:
-            "radial-gradient(ellipse 80% 50% at 50% 50%, rgba(20,3,3,0.6) 0%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
+    <section ref={ref} style={{ minHeight: "100vh", display: "flex", alignItems: "center", padding: "10rem 2rem", position: "relative", overflow: "hidden" }}>
+      {/* Moving fog background */}
+      <motion.div style={{ y: bgY, position: "absolute", inset: "-15%", pointerEvents: "none" }}>
+        <div className="animate-fog-slow" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 70% 55% at 50% 50%, rgba(18,3,3,0.7) 0%, transparent 70%)" }} />
+      </motion.div>
 
       <div style={{ width: "100%", maxWidth: "1100px", margin: "0 auto", position: "relative", zIndex: 5 }}>
-        {/* Section header */}
+        {/* Section label */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
-          transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
-          style={{ textAlign: "center", marginBottom: "5rem" }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }}
+          transition={{ duration: 0.9 }}
+          style={{ marginBottom: "4rem", textAlign: "center" }}
         >
-          <div
-            style={{
-              fontFamily: "monospace",
-              fontSize: "0.6rem",
-              letterSpacing: "0.5em",
-              color: "rgba(139,26,26,0.5)",
-              marginBottom: "1rem",
-              textTransform: "uppercase",
-            }}
-          >
-            ── ROSTER / CLASSIFIED ──
+          <div style={{ fontFamily: "monospace", fontSize: "0.55rem", letterSpacing: "0.55em", color: "rgba(139,26,26,0.45)", marginBottom: "0.8rem", textTransform: "uppercase" }}>
+            ── ROSTER / ACTIVE OPERATIVES ──
           </div>
-          <h2
-            style={{
-              fontFamily: "'Cinzel', serif",
-              fontSize: "clamp(1.5rem, 4vw, 2.5rem)",
-              fontWeight: 700,
-              letterSpacing: "0.25em",
-              color: "#d4c9b8",
-              marginBottom: "0.5rem",
-            }}
-          >
+          <h2 style={{ fontFamily: "'Cinzel', serif", fontSize: "clamp(1.4rem, 3.5vw, 2.2rem)", fontWeight: 700, letterSpacing: "0.22em", color: "#d0c8bc", marginBottom: "0.6rem" }}>
             THE ENTITIES
           </h2>
-          <p
-            style={{
-              fontFamily: "monospace",
-              fontSize: "0.65rem",
-              color: "rgba(212,201,184,0.3)",
-              letterSpacing: "0.08em",
-              maxWidth: "500px",
-              margin: "0 auto",
-            }}
-          >
-            Two operators. One architecture. Neither product nor team —{" "}
-            <em>a system with intent.</em>
+          <p style={{ fontFamily: "monospace", fontSize: "0.62rem", color: "rgba(212,201,184,0.25)", maxWidth: "420px", margin: "0 auto", lineHeight: 1.8 }}>
+            Not developers. Not designers.<br />Operators within the Arkhram system.
           </p>
         </motion.div>
 
-        {/* Entity cards grid */}
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 460px), 1fr))",
-            gap: "2px",
-          }}
-        >
-          {ENTITIES.map((entity, i) => (
-            <EntityCard key={entity.id} entity={entity} index={i} />
-          ))}
+        {/* Entity grid */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(min(100%, 440px), 1fr))", gap: "2px" }}>
+          {ENTITIES.map((e, i) => <EntityReveal key={e.id} entity={e} index={i} />)}
         </div>
-
-        {/* Connector line between cards */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={isInView ? { opacity: 1 } : { opacity: 0 }}
-          transition={{ delay: 1, duration: 1.5 }}
-          style={{
-            textAlign: "center",
-            marginTop: "3rem",
-            fontFamily: "monospace",
-            fontSize: "0.55rem",
-            letterSpacing: "0.4em",
-            color: "rgba(139,26,26,0.3)",
-            textTransform: "uppercase",
-          }}
-        >
-          ✦ &nbsp; unified under arkhram &nbsp; ✦
-        </motion.div>
       </div>
     </section>
   );

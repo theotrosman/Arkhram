@@ -2,204 +2,204 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
-const WHISPER = "A system is only as quiet as its darkest layer.";
+const LINE1 = "ARKHRAM";
+const LINE2 = "ORGANIZATION";
 
-function TypewriterText({ text, delay = 0 }: { text: string; delay?: number }) {
-  const [displayed, setDisplayed] = useState("");
-  const [started, setStarted] = useState(false);
-
-  useEffect(() => {
-    const t = setTimeout(() => setStarted(true), delay);
-    return () => clearTimeout(t);
-  }, [delay]);
+function GlitchTitle() {
+  const [phase, setPhase] = useState(0);
 
   useEffect(() => {
-    if (!started) return;
-    let i = 0;
-    const iv = setInterval(() => {
-      i++;
-      setDisplayed(text.slice(0, i));
-      if (i >= text.length) clearInterval(iv);
-    }, 55);
-    return () => clearInterval(iv);
-  }, [started, text]);
+    const t1 = setTimeout(() => setPhase(1), 800);
+    const t2 = setTimeout(() => setPhase(2), 2200);
+    const t3 = setTimeout(() => setPhase(3), 3400);
+    return () => { clearTimeout(t1); clearTimeout(t2); clearTimeout(t3); };
+  }, []);
 
   return (
-    <span>
-      {displayed}
-      {displayed.length < text.length && (
-        <span className="cursor-blink" style={{ color: "#8b1a1a" }}>
-          |
+    <div style={{ position: "relative", textAlign: "center" }}>
+      {/* Noise scramble → reveal */}
+      <motion.div
+        style={{
+          fontFamily: "'Cinzel', serif",
+          fontSize: "clamp(3.5rem, 14vw, 11rem)",
+          fontWeight: 900,
+          letterSpacing: "0.25em",
+          lineHeight: 0.9,
+          position: "relative",
+          userSelect: "none",
+        }}
+      >
+        {/* Ghost red layer — chromatic */}
+        <motion.span
+          aria-hidden
+          style={{
+            position: "absolute",
+            inset: 0,
+            color: "rgba(139,26,26,0.55)",
+            display: "block",
+          }}
+          animate={phase >= 2 ? { x: [0, -3, 2, -1, 0], opacity: [0.55, 0.8, 0.3, 0.6, 0.55] } : { x: 0 }}
+          transition={{ duration: 0.18, repeat: phase === 2 ? 4 : 0, ease: "linear" }}
+        >
+          {LINE1}
+        </motion.span>
+
+        {/* Main text */}
+        <motion.span
+          style={{
+            background: "linear-gradient(180deg, #f0e8dc 0%, #b0a090 55%, #5a4a40 100%)",
+            WebkitBackgroundClip: "text",
+            WebkitTextFillColor: "transparent",
+            backgroundClip: "text",
+            display: "block",
+            position: "relative",
+            zIndex: 2,
+          }}
+          initial={{ opacity: 0, filter: "blur(30px)" }}
+          animate={phase >= 1 ? { opacity: 1, filter: "blur(0px)" } : {}}
+          transition={{ duration: 1.8, ease: "easeOut" }}
+        >
+          {LINE1}
+        </motion.span>
+      </motion.div>
+
+      {/* Subtitle line */}
+      <motion.div
+        style={{
+          fontFamily: "'Cinzel', serif",
+          fontSize: "clamp(0.55rem, 1.8vw, 0.85rem)",
+          letterSpacing: "0.75em",
+          color: "rgba(192,160,96,0.6)",
+          marginTop: "1rem",
+          textTransform: "uppercase",
+        }}
+        initial={{ opacity: 0, y: 12 }}
+        animate={phase >= 3 ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 1.2, ease: "easeOut" }}
+      >
+        {LINE2}
+      </motion.div>
+
+      {/* Horizontal rule */}
+      <motion.div
+        style={{
+          height: "1px",
+          background: "linear-gradient(90deg, transparent, rgba(139,26,26,0.5), rgba(192,160,96,0.25), rgba(139,26,26,0.5), transparent)",
+          marginTop: "2rem",
+          marginBottom: "0",
+        }}
+        initial={{ scaleX: 0 }}
+        animate={phase >= 3 ? { scaleX: 1 } : {}}
+        transition={{ duration: 1.4, delay: 0.2, ease: "easeOut" }}
+      />
+    </div>
+  );
+}
+
+function ScrollCue() {
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ delay: 5, duration: 1.5 }}
+      style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.6rem" }}
+    >
+      <motion.div
+        animate={{ y: [0, 9, 0] }}
+        transition={{ duration: 2.2, repeat: Infinity, ease: "easeInOut" }}
+        style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.35rem" }}
+      >
+        <span style={{ fontFamily: "monospace", fontSize: "0.52rem", letterSpacing: "0.45em", color: "rgba(212,201,184,0.25)", textTransform: "uppercase" }}>
+          scroll
         </span>
-      )}
-    </span>
+        <svg width="1" height="40" viewBox="0 0 1 40" style={{ overflow: "visible" }}>
+          <motion.line
+            x1="0" y1="0" x2="0" y2="40"
+            stroke="rgba(139,26,26,0.35)"
+            strokeWidth="1"
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ delay: 5.5, duration: 1, ease: "easeOut" }}
+          />
+        </svg>
+      </motion.div>
+    </motion.div>
   );
 }
 
 export function IntroSection() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
-
-  const sectionOpacity = useTransform(scrollYProgress, [0.6, 0.9], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, 1.05]);
-  const fogY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "18%"]);
+  const sectionOpacity = useTransform(scrollYProgress, [0.55, 0.85], [1, 0]);
 
   return (
     <motion.section
       ref={ref}
-      style={{ opacity: sectionOpacity, height: "100vh" }}
-      className="relative flex items-center justify-center overflow-hidden"
+      style={{ height: "100vh", position: "relative", overflow: "hidden", opacity: sectionOpacity }}
     >
-      <div style={{ position: "relative", width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-        {/* Deep fog layers */}
-        <motion.div style={{ y: fogY }}>
-          <div
-            className="animate-fog"
-            style={{
-              position: "absolute",
-              inset: "-20%",
-              background:
-                "radial-gradient(ellipse 120% 60% at 30% 80%, rgba(20,5,5,0.9) 0%, transparent 70%)",
-              pointerEvents: "none",
-            }}
-          />
-          <div
-            className="animate-fog-slow"
-            style={{
-              position: "absolute",
-              inset: "-20%",
-              background:
-                "radial-gradient(ellipse 100% 50% at 70% 90%, rgba(30,5,5,0.7) 0%, transparent 70%)",
-              pointerEvents: "none",
-            }}
-          />
-        </motion.div>
+      {/* Parallax fog */}
+      <motion.div style={{ y, position: "absolute", inset: "-20%", pointerEvents: "none" }}>
+        <div className="animate-fog" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 110% 55% at 25% 85%, rgba(18,3,3,0.95) 0%, transparent 65%)" }} />
+        <div className="animate-fog-slow" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 90% 45% at 75% 90%, rgba(25,4,4,0.75) 0%, transparent 65%)" }} />
+        <div className="animate-fog-slower" style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 60% 30% at 50% 40%, rgba(10,2,2,0.4) 0%, transparent 70%)" }} />
+      </motion.div>
 
-        {/* Gothic architecture silhouette */}
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: "45%",
-            pointerEvents: "none",
-          }}
-        >
-          <svg
-            viewBox="0 0 1440 400"
-            preserveAspectRatio="xMidYMax slice"
-            style={{ width: "100%", height: "100%", opacity: 0.08 }}
-          >
-            {/* Cathedral towers */}
-            <path
-              d="M0 400 L0 200 L40 200 L40 100 L50 80 L60 100 L60 200 L120 200 L120 150 L130 130 L140 150 L140 200 L200 200 L200 250 L220 250 L220 180 L240 160 L260 180 L260 250 L280 250 L280 200 L320 200 L320 120 L330 80 L340 120 L340 200 L400 200 L400 170 L420 140 L440 170 L440 200 L500 200 L500 230 L520 210 L540 230 L540 400 Z"
-              fill="#d4c9b8"
-            />
-            <path
-              d="M900 400 L900 180 L920 160 L940 180 L940 220 L980 220 L980 150 L1000 120 L1010 100 L1020 120 L1040 150 L1040 220 L1080 220 L1080 200 L1100 170 L1120 200 L1120 220 L1160 220 L1160 180 L1200 140 L1240 180 L1240 220 L1280 220 L1280 200 L1300 170 L1320 170 L1320 200 L1360 200 L1360 160 L1380 130 L1400 160 L1400 200 L1440 200 L1440 400 Z"
-              fill="#d4c9b8"
-            />
-            {/* Spires */}
-            <line x1="50" y1="80" x2="50" y2="30" stroke="#d4c9b8" strokeWidth="2" />
-            <polygon points="50,15 44,35 56,35" fill="#d4c9b8" />
-            <line x1="330" y1="80" x2="330" y2="30" stroke="#d4c9b8" strokeWidth="2" />
-            <polygon points="330,15 324,35 336,35" fill="#d4c9b8" />
-            <line x1="1010" y1="100" x2="1010" y2="40" stroke="#d4c9b8" strokeWidth="2" />
-            <polygon points="1010,25 1003,45 1017,45" fill="#d4c9b8" />
-          </svg>
-        </div>
+      {/* Gothic spire skyline */}
+      <div style={{ position: "absolute", bottom: 0, left: 0, right: 0, height: "42%", pointerEvents: "none", zIndex: 2 }}>
+        <svg viewBox="0 0 1440 360" preserveAspectRatio="xMidYMax slice" style={{ width: "100%", height: "100%", opacity: 0.1 }}>
+          <path d="M0 360 L0 180 L30 180 L30 80 L45 55 L55 30 L65 55 L80 80 L80 180 L140 180 L140 140 L155 115 L165 95 L175 115 L190 140 L190 180 L250 180 L250 150 L265 125 L270 110 L275 125 L290 150 L290 180 L360 180 L360 100 L370 70 L380 40 L390 70 L400 100 L400 180 L470 180 L470 160 L480 140 L490 160 L490 180 L560 180 L560 360 Z" fill="#d4c9b8" />
+          <path d="M880 360 L880 160 L895 140 L910 115 L925 90 L935 65 L945 90 L955 115 L970 140 L985 160 L985 200 L1040 200 L1040 160 L1055 130 L1060 105 L1065 130 L1080 160 L1080 200 L1140 200 L1140 175 L1155 150 L1165 130 L1175 150 L1190 175 L1190 200 L1250 200 L1250 170 L1270 140 L1290 115 L1310 140 L1330 170 L1330 200 L1380 200 L1380 160 L1400 130 L1420 160 L1440 180 L1440 360 Z" fill="#d4c9b8" />
+          {/* Spire needles */}
+          <line x1="55" y1="30" x2="55" y2="0" stroke="#d4c9b8" strokeWidth="1.5" />
+          <polygon points="55,0 50,15 60,15" fill="#d4c9b8" />
+          <line x1="380" y1="40" x2="380" y2="5" stroke="#d4c9b8" strokeWidth="1.5" />
+          <polygon points="380,5 375,20 385,20" fill="#d4c9b8" />
+          <line x1="935" y1="65" x2="935" y2="25" stroke="#d4c9b8" strokeWidth="1.5" />
+          <polygon points="935,25 929,42 941,42" fill="#d4c9b8" />
+          <line x1="1290" y1="115" x2="1290" y2="75" stroke="#d4c9b8" strokeWidth="1.5" />
+          <polygon points="1290,75 1284,92 1296,92" fill="#d4c9b8" />
+        </svg>
+      </div>
 
-        {/* Center content */}
+      {/* Main content */}
+      <div style={{ position: "absolute", inset: 0, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", zIndex: 10, padding: "0 2rem", gap: "4rem" }}>
+        {/* Mono pre-label */}
         <motion.div
-          style={{ scale, position: "relative", zIndex: 20, textAlign: "center", padding: "0 2rem" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ duration: 2, delay: 0.5 }}
+          transition={{ delay: 0.4, duration: 1.5 }}
+          style={{ fontFamily: "monospace", fontSize: "0.58rem", letterSpacing: "0.55em", color: "rgba(139,26,26,0.5)", textTransform: "uppercase" }}
         >
-          {/* Small label */}
-          <motion.div
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 1 }}
-            style={{
-              fontFamily: "monospace",
-              fontSize: "0.65rem",
-              letterSpacing: "0.4em",
-              color: "rgba(139,26,26,0.7)",
-              marginBottom: "2.5rem",
-              textTransform: "uppercase",
-            }}
-          >
-            ARKHRAM / TRANSMISSION_001
-          </motion.div>
-
-          {/* Whisper line */}
-          <div
-            style={{
-              fontFamily: "'Cinzel', serif",
-              fontSize: "clamp(1rem, 2.5vw, 1.6rem)",
-              color: "#d4c9b8",
-              letterSpacing: "0.12em",
-              lineHeight: 1.8,
-              maxWidth: "700px",
-              margin: "0 auto",
-              fontStyle: "italic",
-              opacity: 0.85,
-            }}
-          >
-            <TypewriterText text={`"${WHISPER}"`} delay={1800} />
-          </div>
-
-          {/* Scroll prompt */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 5, duration: 1.5 }}
-            style={{ marginTop: "5rem" }}
-          >
-            <motion.div
-              animate={{ y: [0, 8, 0] }}
-              transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: "0.5rem",
-                cursor: "default",
-              }}
-            >
-              <span
-                style={{
-                  fontFamily: "monospace",
-                  fontSize: "0.6rem",
-                  letterSpacing: "0.35em",
-                  color: "rgba(212,201,184,0.3)",
-                  textTransform: "uppercase",
-                }}
-              >
-                scroll to enter
-              </span>
-              <svg width="16" height="24" viewBox="0 0 16 24" fill="none">
-                <rect x="6" y="2" width="4" height="8" rx="2" fill="rgba(139,26,26,0.4)" />
-                <rect x="5" y="0" width="6" height="14" rx="3" stroke="rgba(139,26,26,0.4)" strokeWidth="1.5" fill="none" />
-                <path d="M4 19 L8 23 L12 19" stroke="rgba(139,26,26,0.4)" strokeWidth="1.5" fill="none" />
-              </svg>
-            </motion.div>
-          </motion.div>
+          ARKHRAM / SYS_INIT / 2026
         </motion.div>
 
-        {/* Vignette */}
-        <div
+        <GlitchTitle />
+
+        {/* Manifesto line */}
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 4.2, duration: 2 }}
           style={{
-            position: "absolute",
-            inset: 0,
-            background: "radial-gradient(ellipse at center, transparent 40%, rgba(0,0,0,0.85) 100%)",
-            pointerEvents: "none",
-            zIndex: 15,
+            fontFamily: "'Cinzel', serif",
+            fontSize: "clamp(0.65rem, 1.4vw, 0.9rem)",
+            fontStyle: "italic",
+            color: "rgba(212,201,184,0.35)",
+            letterSpacing: "0.08em",
+            textAlign: "center",
+            maxWidth: "520px",
+            lineHeight: 1.9,
           }}
-        />
+        >
+          &ldquo;A system is only as quiet as its darkest layer.&rdquo;
+        </motion.p>
+
+        <ScrollCue />
       </div>
+
+      {/* Vignette */}
+      <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at center, transparent 35%, rgba(0,0,0,0.88) 100%)", pointerEvents: "none", zIndex: 15 }} />
     </motion.section>
   );
 }
