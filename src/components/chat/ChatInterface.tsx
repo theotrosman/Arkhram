@@ -8,7 +8,6 @@ import { SkillChips } from "./SkillChips";
 import { OnboardingModal } from "./OnboardingModal";
 import { AutomationConfig, ChatMessage as ChatMessageType } from "@/lib/types";
 import { createClient } from "@/lib/supabase/client";
-import { getUserId } from "@/lib/supabase";
 import { CheckCircle2, Loader2 } from "lucide-react";
 
 interface UserProfile {
@@ -151,15 +150,11 @@ export function ChatInterface({ onAutomationCreated }: ChatInterfaceProps) {
 
   async function generateFlow(config: AutomationConfig) {
     setIsGenerating(true);
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    const userId = user?.id ?? getUserId();
-
     try {
       const response = await fetch("/api/generate-flow", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ config, userId }),
+        body: JSON.stringify({ config }),
       });
 
       const data = await response.json();

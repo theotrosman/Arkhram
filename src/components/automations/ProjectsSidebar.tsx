@@ -4,8 +4,6 @@ import { useState, useEffect } from "react";
 import { Folder, FolderPlus, ChevronRight, X, Plus } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Automation } from "@/lib/types";
-import { getUserId } from "@/lib/supabase";
-import { createClient } from "@/lib/supabase/client";
 
 interface Project {
   id: string;
@@ -47,15 +45,10 @@ export function ProjectsSidebar() {
 
   useEffect(() => {
     setProjects(loadProjects());
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data: { user } }) => {
-      const userId = user?.id ?? getUserId();
-      if (!userId) return;
-      fetch(`/api/automations?userId=${userId}`)
-        .then((r) => r.json())
-        .then((d) => setAutomations(d.automations ?? []))
-        .catch(() => {});
-    });
+    fetch("/api/automations")
+      .then((r) => r.ok ? r.json() : { automations: [] })
+      .then((d) => setAutomations(d.automations ?? []))
+      .catch(() => {});
   }, []);
 
   function createProject() {

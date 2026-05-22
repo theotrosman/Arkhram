@@ -1,45 +1,58 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase } from "@/lib/supabase";
+import { createClient } from "@/lib/supabase/server";
 import { activateWorkflow, deactivateWorkflow, deleteWorkflow } from "@/lib/n8n";
+import { z } from "zod";
+
+async function getAuthUser() {
+  const supabase = await createClient();
+  const { data: { user }, error } = await supabase.auth.getUser();
+  if (error || !user) return { user: null, supabase };
+  return { user, supabase };
+}
 
 export async function GET(req: NextRequest) {
-  const userId = req.nextUrl.searchParams.get("userId");
-  if (!userId) {
-    return NextResponse.json({ error: "userId requerido" }, { status: 400 });
-  }
+  const { user, supabase } = await getAuthUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
   const { data, error } = await supabase
     .from("automations")
-    .select("*")
-    .eq("user_id", userId)
+    .select("id, name, description, status, n8n_workflow_id, created_at, updated_at")
+    .eq("user_id", user.id)
     .order("created_at", { ascending: false });
 
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
+  if (error) return NextResponse.json({ error: "Error fetching automations" }, { status: 500 });
   return NextResponse.json({ automations: data });
 }
 
-export async function PATCH(req: NextRequest) {
-  try {
-    const { id, status } = await req.json();
+const patchSchema = z.object({
+  id: z.string().uuid(),
+  status: z.enum(["active", "paused", "draft"]),
+});
 
-    const { data: automation } = await supabase
+export async function PATCH(req: NextRequest) {
+  const { user, supabase } = await getAuthUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    const body = await req.json();
+    const { id, status } = patchSchema.parse(body);
+
+    // Verify ownership before updating
+    const { data: existing } = await supabase
       .from("automations")
-      .select("n8n_workflow_id")
+      .select("id, n8n_workflow_id")
       .eq("id", id)
+      .eq("user_id", user.id)
       .single();
 
-    if (automation?.n8n_workflow_id) {
+    if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    if (existing.n8n_workflow_id) {
       try {
-        if (status === "active") {
-          await activateWorkflow(automation.n8n_workflow_id);
-        } else if (status === "paused") {
-          await deactivateWorkflow(automation.n8n_workflow_id);
-        }
-      } catch (n8nError) {
-        console.warn("n8n status update failed:", n8nError);
+        if (status === "active") await activateWorkflow(existing.n8n_workflow_id);
+        else if (status === "paused") await deactivateWorkflow(existing.n8n_workflow_id);
+      } catch {
+        // n8n unavailable — continue, state persisted in DB
       }
     }
 
@@ -47,40 +60,53 @@ export async function PATCH(req: NextRequest) {
       .from("automations")
       .update({ status, updated_at: new Date().toISOString() })
       .eq("id", id)
-      .select()
+      .eq("user_id", user.id)
+      .select("id, name, description, status, n8n_workflow_id, created_at, updated_at")
       .single();
 
     if (error) throw error;
     return NextResponse.json({ automation: data });
   } catch (error) {
-    return NextResponse.json({ error: "Error actualizando" }, { status: 500 });
+    if (error instanceof z.ZodError) {
+      return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+    }
+    return NextResponse.json({ error: "Error updating" }, { status: 500 });
   }
 }
 
 export async function DELETE(req: NextRequest) {
+  const { user, supabase } = await getAuthUser();
+  if (!user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
   try {
     const id = req.nextUrl.searchParams.get("id");
-    if (!id) return NextResponse.json({ error: "id requerido" }, { status: 400 });
-
-    const { data: automation } = await supabase
-      .from("automations")
-      .select("n8n_workflow_id")
-      .eq("id", id)
-      .single();
-
-    if (automation?.n8n_workflow_id) {
-      try {
-        await deleteWorkflow(automation.n8n_workflow_id);
-      } catch (n8nError) {
-        console.warn("n8n delete failed:", n8nError);
-      }
+    if (!id || !/^[0-9a-f-]{36}$/.test(id)) {
+      return NextResponse.json({ error: "Invalid id" }, { status: 400 });
     }
 
-    const { error } = await supabase.from("automations").delete().eq("id", id);
-    if (error) throw error;
+    // Verify ownership before deleting
+    const { data: existing } = await supabase
+      .from("automations")
+      .select("id, n8n_workflow_id")
+      .eq("id", id)
+      .eq("user_id", user.id)
+      .single();
 
+    if (!existing) return NextResponse.json({ error: "Not found" }, { status: 404 });
+
+    if (existing.n8n_workflow_id) {
+      try { await deleteWorkflow(existing.n8n_workflow_id); } catch {}
+    }
+
+    const { error } = await supabase
+      .from("automations")
+      .delete()
+      .eq("id", id)
+      .eq("user_id", user.id);
+
+    if (error) throw error;
     return NextResponse.json({ success: true });
-  } catch (error) {
-    return NextResponse.json({ error: "Error eliminando" }, { status: 500 });
+  } catch {
+    return NextResponse.json({ error: "Error deleting" }, { status: 500 });
   }
 }

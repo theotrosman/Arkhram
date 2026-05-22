@@ -92,11 +92,16 @@ export function HeroSection() {
             ARKHRAM
           </h1>
 
-          {/* Taglines — dry, precise */}
-          <div className="mt-7 space-y-0.5 font-mono text-sm">
-            <p className="text-zinc-600">No es un wrapper de IA.</p>
-            <p className="text-zinc-600">No es un builder visual.</p>
-            <p className="text-zinc-400">Es infraestructura de automatización.</p>
+          {/* Taglines */}
+          <div className="mt-7 font-mono">
+            <p className="text-sm">
+              <span className="text-zinc-500">Describís.</span>{" "}
+              <span className="text-zinc-500">Arkhram estructura.</span>{" "}
+              <span className="text-zinc-300">El flujo corre.</span>
+            </p>
+            <p className="text-[11px] text-zinc-700 mt-1.5 tracking-wide">
+              sin código · sin builders · sin configuración
+            </p>
           </div>
 
           {/* Live counter */}

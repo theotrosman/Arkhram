@@ -4,8 +4,6 @@ import { useState, useEffect, useCallback } from "react";
 import { Automation, AutomationStatus } from "@/lib/types";
 import { AutomationCard } from "./AutomationCard";
 import { AutomationDetail } from "./AutomationDetail";
-import { getUserId } from "@/lib/supabase";
-import { createClient } from "@/lib/supabase/client";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { Loader2, Zap } from "lucide-react";
@@ -20,17 +18,13 @@ export function AutomationsSidebar({ refreshTrigger }: AutomationsSidebarProps) 
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchAutomations = useCallback(async () => {
-    const supabase = createClient();
-    const { data: { user } } = await supabase.auth.getUser();
-    const userId = user?.id ?? getUserId();
-    if (!userId) return;
-
     try {
-      const res = await fetch(`/api/automations?userId=${userId}`);
+      const res = await fetch("/api/automations");
+      if (!res.ok) { setIsLoading(false); return; }
       const data = await res.json();
       setAutomations(data.automations ?? []);
     } catch {
-      console.error("Error fetching automations");
+      // silently fail
     } finally {
       setIsLoading(false);
     }
