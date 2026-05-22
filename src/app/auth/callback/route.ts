@@ -12,7 +12,10 @@ export async function GET(request: NextRequest) {
     if (!error) {
       return NextResponse.redirect(`${origin}${next}`);
     }
+    // Expose the actual error so we can debug it
+    const msg = encodeURIComponent(error.message ?? "exchange_failed");
+    return NextResponse.redirect(`${origin}/login?error=${msg}`);
   }
 
-  return NextResponse.redirect(`${origin}/login?error=auth_failed`);
+  return NextResponse.redirect(`${origin}/login?error=no_code`);
 }
