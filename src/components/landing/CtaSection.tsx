@@ -51,7 +51,7 @@ export function CtaSection() {
             borderRight: "1px solid rgba(255,255,255,0.04)",
             borderBottom: "1px solid rgba(255,255,255,0.04)",
             background: "rgba(3,2,2,0.5)",
-            opacity: visible ? 1 : 0,
+            opacity: 1,
             transform: visible ? "translateY(0)" : "translateY(30px)",
             transition: "opacity 0.8s ease, transform 0.8s ease",
           }}
@@ -75,7 +75,7 @@ export function CtaSection() {
 
           <div className="font-mono text-[10px] space-y-1.5" style={{ color: "#1a1a1a" }}>
             <p>No credit card. No meetings. No consultants.</p>
-            <p>Describe. ARKHRAM executes.</p>
+            <p>Describe. AUTOMATIS executes.</p>
           </div>
         </div>
 
@@ -83,7 +83,7 @@ export function CtaSection() {
         <div
           className="p-10 lg:p-16 flex flex-col justify-center gap-8"
           style={{
-            opacity: visible ? 1 : 0,
+            opacity: 1,
             transform: visible ? "translateY(0)" : "translateY(30px)",
             transition: "opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s",
           }}
@@ -116,7 +116,7 @@ export function CtaSection() {
             >
               <span>
                 <span style={{ color: "#8b1a1a" }}>❯ </span>
-                arkhram --connect --user=new
+                automatis --connect --user=new
               </span>
               <span
                 className="transition-colors duration-200"
@@ -132,7 +132,7 @@ export function CtaSection() {
               style={{ letterSpacing: "0.1em" }}
             >
               <span style={{ color: "#2a2020" }}>❯ </span>
-              arkhram --connect --user=existing
+              automatis --connect --user=existing
             </button>
           </div>
 

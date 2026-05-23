@@ -36,7 +36,7 @@ export function ChatPreview() {
             <div className="w-3 h-3 rounded-full bg-red-500/60" />
             <div className="w-3 h-3 rounded-full bg-yellow-500/60" />
             <div className="w-3 h-3 rounded-full bg-emerald-500/60" />
-            <span className="ml-3 text-xs text-zinc-500 font-mono">arkhram.org/chat</span>
+            <span className="ml-3 text-xs text-zinc-500 font-mono">automatis.io/chat</span>
           </div>
 
           {/* Messages */}

@@ -194,7 +194,7 @@ export function AgentsSection() {
             borderRight: "1px solid rgba(255,255,255,0.04)",
             borderBottom: "1px solid rgba(255,255,255,0.04)",
             background: "rgba(5,2,2,0.5)",
-            opacity: visible ? 1 : 0,
+            opacity: 1,
             transform: visible ? "translateY(0)" : "translateY(30px)",
             transition: "opacity 0.8s ease, transform 0.8s ease",
           }}
@@ -246,7 +246,7 @@ export function AgentsSection() {
         <div
           className="flex flex-col section-reveal"
           style={{
-            opacity: visible ? 1 : 0,
+            opacity: 1,
             transform: visible ? "translateY(0)" : "translateY(30px)",
             transition: "opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s",
           }}

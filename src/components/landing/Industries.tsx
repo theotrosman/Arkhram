@@ -46,7 +46,7 @@ export function Industries() {
             Diseñado para cualquier negocio
           </h2>
           <p className="text-zinc-500 max-w-md mx-auto text-sm">
-            Sin importar el rubro, si hay procesos repetitivos, Arkhram los automatiza.
+            Sin importar el rubro, si hay procesos repetitivos, Automatis los automatiza.
           </p>
         </div>
 

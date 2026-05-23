@@ -19,15 +19,26 @@ interface UserProfile {
 
 interface ChatInterfaceProps {
   onAutomationCreated?: () => void;
+  activeSessionId?: string | null;
+  onSessionCreated?: (id: string) => void;
+  injectedPrompt?: string | null;
+  onInjectedPromptConsumed?: () => void;
 }
 
-export function ChatInterface({ onAutomationCreated }: ChatInterfaceProps) {
+export function ChatInterface({
+  onAutomationCreated,
+  activeSessionId,
+  onSessionCreated,
+  injectedPrompt,
+  onInjectedPromptConsumed,
+}: ChatInterfaceProps) {
   const [messages, setMessages] = useState<ChatMessageType[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isStreaming, setIsStreaming] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const [currentSessionId, setCurrentSessionId] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [showOnboarding, setShowOnboarding] = useState(false);
   const [profileLoaded, setProfileLoaded] = useState(false);
@@ -37,6 +48,67 @@ export function ChatInterface({ onAutomationCreated }: ChatInterfaceProps) {
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
+
+  // Load session history when activeSessionId changes
+  useEffect(() => {
+    if (!activeSessionId) {
+      setMessages([]);
+      setCurrentSessionId(null);
+      return;
+    }
+    setCurrentSessionId(activeSessionId);
+    fetch(`/api/chat-sessions/messages?session_id=${activeSessionId}`)
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data?.messages) {
+          setMessages(data.messages.map((m: { role: string; content: string }) => ({
+            role: m.role as "user" | "assistant",
+            content: m.content,
+          })));
+        }
+      })
+      .catch(() => {});
+  }, [activeSessionId]);
+
+  // Inject prompt from Skills
+  useEffect(() => {
+    if (injectedPrompt) {
+      setInput(injectedPrompt);
+      onInjectedPromptConsumed?.();
+    }
+  }, [injectedPrompt, onInjectedPromptConsumed]);
+
+  // Helper: ensure a session exists, create one if needed
+  async function ensureSession(firstMessage: string): Promise<string | null> {
+    if (currentSessionId) return currentSessionId;
+    try {
+      const title = firstMessage.slice(0, 60) || "Nueva conversación";
+      const res = await fetch("/api/chat-sessions", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ title }),
+      });
+      if (!res.ok) return null;
+      const data = await res.json();
+      const id = data.session?.id;
+      setCurrentSessionId(id);
+      onSessionCreated?.(id);
+      return id;
+    } catch {
+      return null;
+    }
+  }
+
+  // Helper: save a single message to DB
+  async function persistMessage(sessionId: string, role: string, content: string) {
+    try {
+      await fetch("/api/chat-sessions/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ session_id: sessionId, role, content }),
+      });
+    } catch {}
+  }
 
   useEffect(() => {
     async function loadProfile() {
@@ -102,6 +174,10 @@ export function ChatInterface({ onAutomationCreated }: ChatInterfaceProps) {
       setInput("");
       setIsLoading(true);
       setSuccessMessage(null);
+
+      // Ensure a session exists and persist the user message
+      const sessionId = await ensureSession(content);
+      if (sessionId) await persistMessage(sessionId, "user", content);
 
       try {
         const response = await fetch("/api/chat", {
@@ -173,6 +249,8 @@ export function ChatInterface({ onAutomationCreated }: ChatInterfaceProps) {
         }
 
         setIsStreaming(false);
+        // Persist assistant message
+        if (sessionId && fullContent) await persistMessage(sessionId, "assistant", fullContent);
         if (profileNote) saveProfileNote(profileNote);
         if (automationConfig) await generateFlow(automationConfig);
       } catch (error) {
@@ -246,7 +324,7 @@ export function ChatInterface({ onAutomationCreated }: ChatInterfaceProps) {
                 className="font-mono text-[10px] tracking-[0.3em] uppercase"
                 style={{ color: "#8b1a1a" }}
               >
-                / ARKHRAM OS
+                / AUTOMATIS OS
               </p>
               <h2
                 style={{

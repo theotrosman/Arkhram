@@ -1,33 +1,32 @@
-import { GrainOverlay } from "@/components/org/GrainOverlay";
-import { BatSwarm } from "@/components/org/BatSwarm";
-import { IntroSection } from "@/components/org/IntroSection";
-import { OrgReveal } from "@/components/org/OrgReveal";
-import { EntitiesSection } from "@/components/org/EntitiesSection";
-import { ArchivesSection } from "@/components/org/ArchivesSection";
-import { ContactSection } from "@/components/org/ContactSection";
-import { OrgArchitecture } from "@/components/org/OrgArchitecture";
-import { OrgOutro } from "@/components/org/OrgOutro";
+import { LandingNav } from "@/components/layout/LandingNav";
+import { HeroSection } from "@/components/landing/HeroSection";
+import { SystemTicker } from "@/components/landing/SystemTicker";
+import { StatsRow } from "@/components/landing/StatsRow";
+import { SystemPanel } from "@/components/landing/SystemPanel";
+import { AgentsSection } from "@/components/landing/AgentsSection";
+import { TerminalDemo } from "@/components/landing/TerminalDemo";
+import { DirectorySection } from "@/components/landing/DirectorySection";
+import { CtaSection } from "@/components/landing/CtaSection";
+import { Footer } from "@/components/landing/Footer";
+import { SectionNav } from "@/components/landing/SectionNav";
 
-export default function Home() {
+export default function LandingPage() {
   return (
-    <main
-      style={{
-        background: "#050505",
-        minHeight: "100vh",
-        position: "relative",
-        overflowX: "hidden",
-      }}
-    >
-      <GrainOverlay />
-      <BatSwarm />
+    <div style={{ minHeight: "100vh", background: "#050505", color: "#e8e0d5" }}>
+      <LandingNav />
+      <SectionNav />
 
-      <IntroSection />
-      <OrgReveal />
-      <EntitiesSection />
-      <ArchivesSection />
-      <ContactSection />
-      <OrgArchitecture />
-      <OrgOutro />
-    </main>
+      <div className="pt-12">
+        <div id="hero"><HeroSection /></div>
+        <SystemTicker />
+        <div id="stats"><StatsRow /></div>
+        <div id="system"><SystemPanel /></div>
+        <div id="agents"><AgentsSection /></div>
+        <div id="demo"><TerminalDemo /></div>
+        <div id="domains"><DirectorySection /></div>
+        <div id="connect"><CtaSection /></div>
+        <Footer />
+      </div>
+    </div>
   );
 }

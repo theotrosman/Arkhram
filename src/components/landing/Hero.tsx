@@ -49,7 +49,7 @@ export function Hero() {
       {/* Subtitle */}
       <p className="mt-8 max-w-lg text-center text-zinc-400 text-lg leading-relaxed">
         Describí en lenguaje natural lo que querés automatizar.
-        Arkhram lo entiende, hace las preguntas necesarias y genera tu flujo en segundos.
+        Automatis lo entiende, hace las preguntas necesarias y genera tu flujo en segundos.
       </p>
 
       {/* CTAs */}

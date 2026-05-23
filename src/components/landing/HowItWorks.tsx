@@ -18,7 +18,7 @@ const steps = [
   {
     n: "03",
     title: "Tu automatización lista",
-    desc: "Confirma el resumen y Arkhram genera el flujo en n8n automáticamente. Activo en segundos.",
+    desc: "Confirma el resumen y Automatis genera el flujo en n8n automáticamente. Activo en segundos.",
     color: "from-violet-400/20 to-purple-600/5",
     border: "border-violet-400/20",
   },

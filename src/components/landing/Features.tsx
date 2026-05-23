@@ -420,7 +420,7 @@ export function Features() {
     {
       title: "Web Intelligence",
       subtitle: "Autonomous scraping & analysis",
-      description: "ARKHRAM navigates the web, extracts structured data, cleans it, and generates actionable intelligence reports — automatically.",
+      description: "AUTOMATIS navigates the web, extracts structured data, cleans it, and generates actionable intelligence reports — automatically.",
       tag: "SCRAPING",
       demo: <ScrapingDemo />,
     },
@@ -441,7 +441,7 @@ export function Features() {
     {
       title: "Intelligent Memory",
       subtitle: "Context · History · Patterns",
-      description: "ARKHRAM remembers. User context, task history, behavioral patterns — all connected in a living knowledge graph.",
+      description: "AUTOMATIS remembers. User context, task history, behavioral patterns — all connected in a living knowledge graph.",
       tag: "MEMORY",
       demo: <MemoryDemo />,
     },
@@ -455,7 +455,7 @@ export function Features() {
     {
       title: "Multimodal Input",
       subtitle: "Text · Image · Voice · Files",
-      description: "ARKHRAM processes any input type. Documents, images, voice recordings, web pages — unified intelligence layer.",
+      description: "AUTOMATIS processes any input type. Documents, images, voice recordings, web pages — unified intelligence layer.",
       tag: "MULTIMODAL",
       demo: <MultimodalDemo />,
     },
@@ -477,7 +477,7 @@ export function Features() {
             letterSpacing: "0.08em",
           }}
         >
-          What ARKHRAM Does
+          What AUTOMATIS Does
         </h2>
         <p className="font-mono text-sm mt-4 max-w-xl mx-auto" style={{ color: "#3a3530" }}>
           Not features. Capabilities. Each one is real, operational, and running in production.

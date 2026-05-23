@@ -52,7 +52,7 @@ export function ChatHeader({ sidebarOpen, onToggleSidebar }: ChatHeaderProps) {
               letterSpacing: "0.12em",
             }}
           >
-            ARKHRAM
+            AUTOMATIS
           </span>
           <div
             className="w-1 h-1 rounded-full animate-pulse"

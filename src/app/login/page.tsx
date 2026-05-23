@@ -102,7 +102,7 @@ function LoginForm() {
               letterSpacing: "0.15em",
             }}
           >
-            ARKHRAM
+            AUTOMATIS
           </span>
           <div
             className="w-1 h-1 rounded-full animate-pulse"
@@ -126,7 +126,7 @@ function LoginForm() {
                 lineHeight: 1.3,
               }}
             >
-              Describe el proceso.<br />ARKHRAM lo automatiza.
+              Describe el proceso.<br />AUTOMATIS lo automatiza.
             </p>
             <p className="font-mono text-[11px] leading-relaxed" style={{ color: "#4a4540" }}>
               Convierte lenguaje natural en flujos operativos reales. Sin código, sin configuración, sin consultores.
@@ -172,7 +172,7 @@ function LoginForm() {
                 letterSpacing: "0.15em",
               }}
             >
-              ARKHRAM
+              AUTOMATIS
             </Link>
           </div>
 

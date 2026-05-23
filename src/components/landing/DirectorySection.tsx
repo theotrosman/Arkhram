@@ -85,7 +85,7 @@ export function DirectorySection() {
           </p>
           <p className="font-mono text-[11px] leading-relaxed" style={{ color: "#3a3530" }}>
             If there are repetitive processes, there is a flow that replaces them.
-            ARKHRAM knows the patterns and compiles them.
+            AUTOMATIS knows the patterns and compiles them.
           </p>
           <div className="mt-4 pt-4" style={{ borderTop: "1px solid rgba(255,255,255,0.03)" }}>
             <p className="font-mono text-[9px]" style={{ color: "#2a2520" }}>
@@ -109,7 +109,7 @@ export function DirectorySection() {
                 key={dir.path}
                 className="section-reveal"
                 style={{
-                  opacity: visible ? 1 : 0,
+                  opacity: 1,
                   transform: visible ? "translateY(0)" : "translateY(10px)",
                   transition: `opacity 0.5s ease ${di * 0.08}s, transform 0.5s ease ${di * 0.08}s`,
                 }}

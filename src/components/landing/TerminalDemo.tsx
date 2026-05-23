@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 const LINES = [
-  { delay: 0,     type: "prompt",  text: "arkhram --new-session" },
+  { delay: 0,     type: "prompt",  text: "automatis --new-session" },
   { delay: 500,   type: "system",  text: "// Session initialized. Describe your automation." },
   { delay: 1100,  type: "blank",   text: "" },
   { delay: 1300,  type: "user",    text: "when shopify registers a new sale, notify the team on whatsapp with order details" },
@@ -98,7 +98,7 @@ export function TerminalDemo() {
           <div className="space-y-7">
             {[
               ["01 / DESCRIBE", "Natural language. No forms. No builders."],
-              ["02 / ARKHRAM ASKS", "One question at a time. Precise."],
+              ["02 / AUTOMATIS ASKS", "One question at a time. Precise."],
               ["03 / DEPLOYED", "Flow compiled and live in seconds."],
             ].map(([title, desc]) => (
               <div key={title} className="space-y-1.5">
@@ -141,7 +141,7 @@ export function TerminalDemo() {
               <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#1a2a0a" }} />
             </div>
             <span className="ml-3 font-mono text-[10px]" style={{ color: "#2a2020" }}>
-              arkhram / new automation session
+              automatis / new automation session
             </span>
             <div className="ml-auto flex items-center gap-1.5">
               <div

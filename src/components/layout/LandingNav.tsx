@@ -48,7 +48,7 @@ export function LandingNav() {
           textShadow: "0 0 20px rgba(212,201,184,0.15)",
         }}
       >
-        ARKHRAM
+        AUTOMATIS
       </Link>
 
       {/* Center status */}
@@ -60,7 +60,7 @@ export function LandingNav() {
             className="w-1.5 h-1.5 rounded-full animate-pulse"
             style={{ background: "#8b1a1a", boxShadow: "0 0 6px rgba(139,26,26,0.8)" }}
           />
-          <span style={{ color: "#8b1a1a" }}>ARKHRAM OS · ACTIVO</span>
+          <span style={{ color: "#8b1a1a" }}>AUTOMATIS OS · ACTIVO</span>
         </span>
         <span style={{ color: "#2a2520" }}>│</span>
         <span style={{ color: "#3a3530" }}>{time} UTC-3</span>

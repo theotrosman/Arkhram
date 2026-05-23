@@ -12,7 +12,7 @@ type Node = {
 };
 
 const NODES: Node[] = [
-  { id: "core", label: "ARKHRAM", sub: "core", x: 50, y: 50, type: "core" },
+  { id: "core", label: "AUTOMATIS", sub: "core", x: 50, y: 50, type: "core" },
   { id: "seba", label: "CALVIÑO", sub: "entity_01", x: 20, y: 25, type: "entity" },
   { id: "theo", label: "TROSMAN", sub: "entity_02", x: 80, y: 25, type: "entity" },
   { id: "esc", label: "ESCAPE-C137", sub: "ark-001", x: 15, y: 65, type: "project" },
@@ -97,7 +97,7 @@ export function OrgArchitecture() {
             THE ARCHITECTURE
           </h2>
           <p style={{ fontFamily: "monospace", fontSize: "0.65rem", color: "rgba(212,201,184,0.3)", letterSpacing: "0.05em", maxWidth: "460px", margin: "0 auto", lineHeight: 1.8 }}>
-            Arkhram is not a team. It is a network. Every entity, project, and infrastructure layer
+            Automatis is not a team. It is a network. Every entity, project, and infrastructure layer
             connected by shared intent.
           </p>
         </motion.div>

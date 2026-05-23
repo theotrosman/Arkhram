@@ -9,7 +9,7 @@ const DEFINITIONS = [
   },
   {
     term: "Dark Architecture.",
-    def: "The system works in the background. Silent, persistent, relentless. You describe intent — ARKHRAM executes.",
+    def: "The system works in the background. Silent, persistent, relentless. You describe intent — AUTOMATIS executes.",
   },
   {
     term: "Operating System For Thought.",
@@ -258,13 +258,13 @@ export function SystemPanel() {
           style={{
             borderRight: "1px solid rgba(255,255,255,0.04)",
             borderBottom: "1px solid rgba(255,255,255,0.04)",
-            opacity: visible ? 1 : 0,
+            opacity: 1,
             transform: visible ? "translateY(0)" : "translateY(30px)",
             transition: "opacity 0.8s ease, transform 0.8s ease",
           }}
         >
           <p className="font-mono text-[10px] tracking-[0.3em] uppercase" style={{ color: "#8b1a1a" }}>
-            / WHAT IS ARKHRAM
+            / WHAT IS AUTOMATIS
           </p>
 
           <div className="space-y-8">
@@ -313,7 +313,7 @@ export function SystemPanel() {
         <div
           className="p-10 lg:p-16 flex flex-col gap-8 section-reveal"
           style={{
-            opacity: visible ? 1 : 0,
+            opacity: 1,
             transform: visible ? "translateY(0)" : "translateY(30px)",
             transition: "opacity 0.8s ease 0.2s, transform 0.8s ease 0.2s",
           }}
@@ -363,7 +363,7 @@ export function SystemPanel() {
           </div>
 
           <p className="font-mono text-[10px] leading-relaxed" style={{ color: "#2a2520" }}>
-            Native n8n connectors. If an n8n node exists, ARKHRAM can generate it.
+            Native n8n connectors. If an n8n node exists, AUTOMATIS can generate it.
             Generic webhook available for any system with a REST API.
           </p>
         </div>

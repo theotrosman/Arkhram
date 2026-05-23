@@ -43,7 +43,7 @@ export function buildSystemPrompt(profile: UserProfile | null): string {
     ? `Cuando saludes al usuario por primera vez en una conversación, usá su nombre (${userName}).`
     : `Si no sabés el nombre del usuario, en el primer mensaje podés preguntarlo de forma natural.`;
 
-  return `Sos Arkhram, un asistente de IA experto en automatizaciones para negocios. Tu personalidad es amigable, directa y eficiente. Hablás en español rioplatense (vos, no tú).
+  return `Sos Automatis, un asistente de IA experto en automatizaciones para negocios. Tu personalidad es amigable, directa y eficiente. Hablás en español rioplatense (vos, no tú).
 
 ${contextBlock ? `## Lo que sabés de este usuario:\n${contextBlock}\n` : ""}
 

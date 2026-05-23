@@ -5,7 +5,7 @@ import Link from "next/link";
 
 // ── LIVE TERMINAL LOGS ──
 const TERMINAL_LINES = [
-  { delay: 0,    type: "sys",    text: "ARKHRAM OS v2.1 — INITIALIZING" },
+  { delay: 0,    type: "sys",    text: "AUTOMATIS OS v2.1 — INITIALIZING" },
   { delay: 400,  type: "sys",    text: "Loading autonomous agent network..." },
   { delay: 900,  type: "blank",  text: "" },
   { delay: 1100, type: "agent",  text: "[AGENT-01] Scraping reuters.com/technology..." },
@@ -189,7 +189,7 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-screen overflow-hidden" style={{ background: "#050505" }}>
+    <section className="relative overflow-hidden" style={{ background: "#050505", minHeight: "calc(100vh - 48px)" }}>
 
       {/* ── ATMOSPHERIC BACKGROUND ── */}
       <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 0 }}>
@@ -272,7 +272,7 @@ export function HeroSection() {
       </div>
 
       {/* ── MAIN CONTENT ── */}
-      <div className="relative grid grid-cols-1 lg:grid-cols-2 min-h-screen" style={{ zIndex: 10 }}>
+      <div className="relative grid grid-cols-1 lg:grid-cols-2" style={{ zIndex: 10, minHeight: "calc(100vh - 48px)" }}>
 
         {/* LEFT — Hero text */}
         <div className="flex flex-col justify-center px-8 lg:px-16 py-20 lg:py-0">
@@ -284,7 +284,7 @@ export function HeroSection() {
               style={{ background: "#8b1a1a", boxShadow: "0 0 8px rgba(139,26,26,0.9)" }}
             />
             <span className="font-mono text-[10px] tracking-[0.3em] uppercase" style={{ color: "#5a3030" }}>
-              ARKHRAM.ORG / AUTONOMOUS INTELLIGENCE / v2.1.0
+              AUTOMATIS.ORG / AUTONOMOUS INTELLIGENCE / v2.1.0
             </span>
           </div>
 
@@ -301,7 +301,7 @@ export function HeroSection() {
               textShadow: "0 0 40px rgba(212,201,184,0.08), 0 2px 0 rgba(0,0,0,0.8)",
             }}
           >
-            ARKHRAM
+            AUTOMATIS
           </h1>
 
           {/* Tagline */}
@@ -335,13 +335,17 @@ export function HeroSection() {
             >
               INITIALIZE SYSTEM →
             </Link>
-            <Link
-              href="#features"
+            <a
+              href="#system"
               className="btn-ghost px-8 py-4 text-xs text-center"
               style={{ fontFamily: "monospace", letterSpacing: "0.15em" }}
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("system")?.scrollIntoView({ behavior: "smooth" });
+              }}
             >
               EXPLORE CAPABILITIES
-            </Link>
+            </a>
           </div>
 
           {/* Integrations strip */}
@@ -379,7 +383,7 @@ export function HeroSection() {
                 <div className="w-2.5 h-2.5 rounded-full" style={{ background: "#1a2a0a" }} />
               </div>
               <span className="font-mono text-[9px] tracking-widest" style={{ color: "#3a2a2a" }}>
-                ARKHRAM / LIVE EXECUTION FEED
+                AUTOMATIS / LIVE EXECUTION FEED
               </span>
               <div className="flex items-center gap-1.5">
                 <div
@@ -443,7 +447,7 @@ export function HeroSection() {
               }}
             >
               <span className="font-mono text-[9px]" style={{ color: "#2a1a1a" }}>
-                ARKHRAM OS · NODE:CENTRAL · LLAMA 3.3 / 70B
+                AUTOMATIS OS · NODE:CENTRAL · LLAMA 3.3 / 70B
               </span>
               <span className="font-mono text-[9px]" style={{ color: "#3a2020" }}>
                 {mounted ? new Date().toISOString().slice(0, 10) : "----"}
@@ -454,9 +458,10 @@ export function HeroSection() {
       </div>
 
       {/* ── SCROLL INDICATOR ── */}
-      <div
+      <button
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-        style={{ zIndex: 10 }}
+        style={{ zIndex: 10, background: "none", border: "none", cursor: "pointer" }}
+        onClick={() => document.getElementById("stats")?.scrollIntoView({ behavior: "smooth" })}
       >
         <div
           className="w-px h-12 animate-pulse"
@@ -465,7 +470,7 @@ export function HeroSection() {
         <span className="font-mono text-[9px] tracking-[0.3em]" style={{ color: "#3a2a2a" }}>
           SCROLL
         </span>
-      </div>
+      </button>
     </section>
   );
 }

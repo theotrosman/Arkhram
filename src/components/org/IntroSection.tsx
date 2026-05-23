@@ -2,7 +2,7 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useEffect, useState } from "react";
 
-const LINE1 = "ARKHRAM";
+const LINE1 = "AUTOMATIS";
 const LINE2 = "ORGANIZATION";
 
 function GlitchTitle() {
@@ -171,7 +171,7 @@ export function IntroSection() {
           transition={{ delay: 0.4, duration: 1.5 }}
           style={{ fontFamily: "monospace", fontSize: "0.58rem", letterSpacing: "0.55em", color: "rgba(139,26,26,0.5)", textTransform: "uppercase" }}
         >
-          ARKHRAM / SYS_INIT / 2026
+          AUTOMATIS / SYS_INIT / 2026
         </motion.div>
 
         <GlitchTitle />

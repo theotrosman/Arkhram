@@ -14,14 +14,14 @@ interface Project {
 function loadProjects(): Project[] {
   if (typeof window === "undefined") return [];
   try {
-    return JSON.parse(localStorage.getItem("arkhram_projects") ?? "[]");
+    return JSON.parse(localStorage.getItem("automatis_projects") ?? "[]");
   } catch {
     return [];
   }
 }
 
 function saveProjects(projects: Project[]) {
-  localStorage.setItem("arkhram_projects", JSON.stringify(projects));
+  localStorage.setItem("automatis_projects", JSON.stringify(projects));
 }
 
 export function ProjectsSidebar() {

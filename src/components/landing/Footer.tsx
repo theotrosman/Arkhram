@@ -13,10 +13,10 @@ export function Footer() {
     >
       <div className="flex flex-col gap-1">
         <span className="font-mono text-[10px] tracking-[0.3em]" style={{ color: "#2a2520" }}>
-          ARKHRAM / SYS:2.1 / BUILD:STABLE
+          AUTOMATIS / SYS:2.1 / BUILD:STABLE
         </span>
         <span className="font-mono text-[9px]" style={{ color: "#1a1a1a" }}>
-          arkhram.org
+          automatis.io
         </span>
       </div>
 
@@ -42,7 +42,7 @@ export function Footer() {
       </div>
 
       <span className="font-mono text-[10px]" style={{ color: "#1a1a1a" }}>
-        © {new Date().getFullYear()} ARKHRAM
+        © {new Date().getFullYear()} AUTOMATIS
       </span>
     </footer>
   );
