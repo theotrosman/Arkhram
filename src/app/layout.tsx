@@ -6,9 +6,9 @@ import Script from "next/script";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "AUTOMATIS — The Dark Architecture Of Intelligence",
-  description: "Autonomous AI infrastructure. Agents, automations, web scraping, document generation. An operating system for thought.",
-  keywords: ["AI automation", "autonomous agents", "web scraping", "workflow automation", "artificial intelligence"],
+  title: "ARKHRAM — The Dark Architecture Of Intelligence",
+  description: "Software development, AI automation, and custom systems. Built from the real problem, not the template.",
+  keywords: ["software development", "AI automation", "web scraping", "workflow automation", "custom systems", "Argentina"],
   icons: {
     icon: "/favicon.svg",
   },
@@ -16,10 +16,10 @@ export const metadata: Metadata = {
     google: "KKEVjHH5TfJs0ePa0DyNVyeO67NlUBLvcd-g37Qv_Po",
   },
   openGraph: {
-    title: "AUTOMATIS — The Dark Architecture Of Intelligence",
-    description: "Autonomous AI infrastructure. An operating system for thought.",
-    url: "https://automatis.io",
-    siteName: "AUTOMATIS",
+    title: "ARKHRAM — The Dark Architecture Of Intelligence",
+    description: "Software development and AI automation. Built from the real problem, not the template.",
+    url: "https://arkhram.org",
+    siteName: "ARKHRAM",
     type: "website",
   },
 };
