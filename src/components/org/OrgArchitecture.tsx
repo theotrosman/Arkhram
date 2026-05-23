@@ -20,14 +20,13 @@ const NODES: Node[] = [
   { id: "aut", label: "CADA LADO", sub: "ark-002", x: 85, y: 65, type: "project" },
   { id: "sb", label: "SUPABASE", sub: "db", x: 30, y: 88, type: "infra" },
   { id: "gr", label: "GROQ", sub: "ai", x: 70, y: 88, type: "infra" },
-  { id: "n8", label: "n8n", sub: "automation", x: 85, y: 44, type: "infra" },
 ];
 
 const EDGES = [
   ["core", "seba"], ["core", "theo"],
   ["core", "esc"], ["core", "prm"], ["core", "aut"],
   ["seba", "esc"], ["theo", "prm"], ["theo", "aut"], ["seba", "aut"],
-  ["prm", "gr"], ["aut", "gr"], ["aut", "n8"], ["esc", "sb"], ["prm", "sb"],
+  ["prm", "gr"], ["aut", "gr"], ["esc", "sb"], ["prm", "sb"],
 ];
 
 const NODE_COLORS = {
