@@ -12,12 +12,12 @@ type Node = {
 };
 
 const NODES: Node[] = [
-  { id: "core", label: "AUTOMATIS", sub: "core", x: 50, y: 50, type: "core" },
+  { id: "core", label: "ARKHRAM", sub: "core", x: 50, y: 50, type: "core" },
   { id: "seba", label: "CALVIÑO", sub: "entity_01", x: 20, y: 25, type: "entity" },
   { id: "theo", label: "TROSMAN", sub: "entity_02", x: 80, y: 25, type: "entity" },
   { id: "esc", label: "ESCAPE-C137", sub: "ark-001", x: 15, y: 65, type: "project" },
-  { id: "prm", label: "PROMPTOOL", sub: "ark-002", x: 50, y: 80, type: "project" },
-  { id: "aut", label: "AUTOMATIS", sub: "ark-003", x: 85, y: 65, type: "project" },
+  { id: "prm", label: "PROMPTOOL", sub: "ark-003", x: 50, y: 80, type: "project" },
+  { id: "aut", label: "CADA LADO", sub: "ark-002", x: 85, y: 65, type: "project" },
   { id: "sb", label: "SUPABASE", sub: "db", x: 30, y: 88, type: "infra" },
   { id: "gr", label: "GROQ", sub: "ai", x: 70, y: 88, type: "infra" },
   { id: "n8", label: "n8n", sub: "automation", x: 85, y: 44, type: "infra" },
@@ -97,7 +97,7 @@ export function OrgArchitecture() {
             THE ARCHITECTURE
           </h2>
           <p style={{ fontFamily: "monospace", fontSize: "0.65rem", color: "rgba(212,201,184,0.3)", letterSpacing: "0.05em", maxWidth: "460px", margin: "0 auto", lineHeight: 1.8 }}>
-            Automatis is not a team. It is a network. Every entity, project, and infrastructure layer
+            Arkhram is not a team. It is a network. Every entity, project, and infrastructure layer
             connected by shared intent.
           </p>
         </motion.div>

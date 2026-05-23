@@ -28,7 +28,7 @@ const ENTITIES: Entity[] = [
     quote: "Curiosity over comfort. Iteration over perfection.",
     skills: ["AI Systems", "Python", "C#", "React", "n8n", "Automation"],
     projects: [
-      { name: "ESCAPE-C137", href: "https://github.com/Automatis-Organization/ESCAPE-C137" },
+      { name: "ESCAPE-C137", href: "https://github.com/Arkhram-Organization/ESCAPE-C137" },
       { name: "Tektra", href: "https://github.com/SebaCalvino/Tektra" },
     ],
   },
@@ -44,7 +44,7 @@ const ENTITIES: Entity[] = [
     skills: ["C# / .NET", "Next.js", "TypeScript", "Supabase", "REST", "Vercel"],
     projects: [
       { name: "PROMPTOOL", href: "https://github.com/theotrosman/PROMPTOOL" },
-      { name: "Automatis", href: "https://github.com/Automatis-Organization/Automatis" },
+      { name: "Automatis", href: "https://github.com/Arkhram-Organization/Automatis" },
     ],
   },
 ];
@@ -101,7 +101,7 @@ function EntityReveal({ entity, index }: { entity: Entity; index: number }) {
         {/* Entity ID header */}
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "1.8rem", position: "relative", zIndex: 1 }}>
           <span style={{ fontFamily: "monospace", fontSize: "0.55rem", letterSpacing: "0.4em", color: "rgba(139,26,26,0.5)", textTransform: "uppercase" }}>
-            {entity.id} / AUTOMATIS
+            {entity.id} / ARKHRAM
           </span>
           <span style={{ fontFamily: "monospace", fontSize: "0.5rem", letterSpacing: "0.2em", color: "rgba(212,201,184,0.2)" }}>
             CIPHER: {entity.cipher}
@@ -233,7 +233,7 @@ export function EntitiesSection() {
             THE ENTITIES
           </h2>
           <p style={{ fontFamily: "monospace", fontSize: "0.62rem", color: "rgba(212,201,184,0.25)", maxWidth: "420px", margin: "0 auto", lineHeight: 1.8 }}>
-            Not developers. Not designers.<br />Operators within the Automatis system.
+            Not developers. Not designers.<br />Operators within the Arkhram system.
           </p>
         </motion.div>
 
